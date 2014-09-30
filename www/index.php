@@ -1,4 +1,4 @@
-<html>
+п»ї<html>
 
 <head>
 <style>
@@ -70,23 +70,23 @@
 <body>
 
 <div class="header">
-  <div class="middle_text">Шапка</div>
+  <div class="middle_text">РЁР°РїРєР°</div>
 </div>
 
 <div class="main">
   <div class="content">
-    <div class="middle_text">Контент</div>
+    <div class="middle_text">РљРѕРЅС‚РµРЅС‚</div>
   </div>
   <div class="user">
-    <div class="middle_text">Пользователь</div>
+    <div class="middle_text">РџРѕР»СЊР·РѕРІР°С‚РµР»СЊ</div>
   </div>
   <div class="news">
-    <div class="middle_text">Новости</div>
+    <div class="middle_text">РќРѕРІРѕСЃС‚Рё</div>
   </div>
 </div>
 
 <div class="footer">
-  <div class="middle_text">Подвал</div>
+  <div class="middle_text">РџРѕРґРІР°Р»</div>
 </div>
 
 </body>
