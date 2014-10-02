@@ -1,11 +1,12 @@
-﻿<?
-  $title_full_replace = true;
-  $title = "Система коллективных переводов";
-  include('header.php');
+<?
+  //Код компонента - здесь
+
+  $title = "имя модуля";
+  include('../header.php');
 ?>
 
   <div class="content">
-    <div class="middle_text">Контент</div>
+    Разметка компонента - здесь
   </div>
   <div class="user">
     <div class="middle_text">Пользователь</div>
@@ -15,4 +16,4 @@
     <div class="middle_text">Новости</div>
   </div>
 
-<? include('footer.php');?>
+<? include('../footer.php');?>
