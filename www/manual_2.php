@@ -3,10 +3,10 @@
 <title>Мануал 2</title>
 <style>
  a:link {
-  color: #0000d0; /* Цвет ссылок */
+  color: #0000d0;
  }
  a:visited {
-  color: #0000d0; /* Цвет посещенных ссылок */
+  color: #0000d0;
  }
 </style>
 </head>
@@ -21,7 +21,7 @@
 
   if (!$is_post && count($_GET) == 0) {
     print "Параметров нет. Конец.";
-    exit();
+    exit("\n</body>\n</html>");
   }
 
   if ($is_post) {
@@ -60,7 +60,7 @@ TEXT;
 
 <form method="POST" action="manual_3.php">
   <input type="hidden" name="command" value="without_pause">
-  <input type="submit" value="По щелчку выполняется неведомый скрипт и переносит на исходную страницу">
+  <input type="submit" value="По щелчку выполняется некий скрипт и переносит на исходную страницу">
 </form>
 
 <form method="POST" action="manual_3.php">
