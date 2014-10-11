@@ -5,11 +5,14 @@
   if ($title_full_replace)
     print $title;
   else
-    print "Система коллективных переводов - " . $title;
-  ?></title>
+    print $title . " - Система коллективных переводов";
+  ?></title>  
+  <script type="text/javascript" src="/scripts/jquery-1.7.2.min.js"></script>
   <link rel="icon" type="image/png" href="/images/favicon.png" />
   <link rel="stylesheet" type="text/css" href="/styles/main.css">
-<?php if (function_exists('additionalPageHeader')){
+  <link rel="stylesheet" type="text/css" href="/styles/font.css">
+<?php 
+  if (function_exists('additionalPageHeader')){
   additionalPageHeader();
 }?></head>
 

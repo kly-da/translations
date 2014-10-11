@@ -1,3 +1,7 @@
+body {
+  font: "Times New Roman", sans-serif;
+}
+
 .header {
   position: relative;
   display: block;
