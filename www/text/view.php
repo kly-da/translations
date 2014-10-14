@@ -10,6 +10,9 @@
 
   include('../mod_db.php');
   include('../mod_auth.php');
+  include('../code/text_format.php');
+  
+  mysql_query("SET NAMES utf8");
 
   $query = 'SELECT `text`.*, `user`.`name` AS `creator_name` FROM `text` JOIN `user` ON(`creator` = `user_id`) WHERE `text_id` = ' . $text_id;
   $result = mysql_query($query);
@@ -186,6 +189,8 @@
 
   //=================================== Основной код
 
+  $formatter = new Formatter();
+
   $access = generateAccessLabel();
   $text_type = generateTextTypeLabel();
   if ($text_type_code == 0) {
@@ -200,7 +205,7 @@
     $role = generateRoleLabel();
   }
 
-  if ($user -> isManageUser() || $user -> isTextManager()) {
+  if ($user -> isManageUser() || $user -> isTextAdministratorOrCreator()) {
     $publish_menu_item = generatePublishMenuItem();
     $delete_menu_item = generateDeleteMenuItem();
   }
@@ -271,7 +276,7 @@
         </tr>
         <tr>
           <td class="info_parameter">Создатель</td>
-          <td class="info_value"><a href="/user/view.php?id=<? print $text_row["creator"]?>"><? print $text_row["creator_name"]?></a> <span class="light_gray">(создано – <? print $text_row["date_created"];?>)</span></td>
+          <td class="info_value"><a href="/user/view.php?id=<? print $text_row["creator"]?>"><? print $text_row["creator_name"]?></a> <span class="light_gray">(создано – <? print $formatter -> toStringChangedDate($text_row["date_created"]); ?>)</span></td>
         </tr>
 <?
   if (!$user -> isTextNoRole()) {
@@ -314,12 +319,6 @@
         <a href="delete.php?cid=1"><li>Удалить</li></a>
       </ul>
       <table id="chapter_table">
-        <col class="title"/>
-        <col/>
-        <col/>
-        <col/>
-        <col/>
-        <col/>
         <tr>
           <th class="title">Название</th>
           <th class="left">Переведено</th>
