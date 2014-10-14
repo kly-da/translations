@@ -11,6 +11,8 @@
   include('../mod_db.php');
   include('../mod_auth.php');
   include('../code/text_format.php');
+  
+  mysql_query("SET NAMES utf8");
 
   $query = 'SELECT `text`.*, `user`.`name` AS `creator_name` FROM `text` JOIN `user` ON(`creator` = `user_id`) WHERE `text_id` = ' . $text_id;
   $result = mysql_query($query);
