@@ -226,3 +226,38 @@
 .chapter_menu li:hover {
    background: #000;
 }
+
+
+#translate_table {
+  width: 100%;
+  margin-bottom: 0px;
+  border: 0;
+  border-collapse:collapse;
+  font: 16px/22px;
+  table-spacing: 0;
+}
+#translate_table th {
+  border-bottom: 1px solid #000;
+}
+
+#translate_table th, #translate_table td {
+  padding-right: 10px;
+  text-align: left;
+  vertical-align: top;
+  white-space: nowrap;
+}
+
+#translate_table th:last-of-type, #translate_table td:last-of-type {
+  padding-right: 0;
+}
+
+#translate_table .title {
+  width: 100%;
+  text-align: left;
+  white-space: normal;
+}
+
+#translate_table .left {
+  text-align: left;
+}
+

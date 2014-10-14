@@ -36,6 +36,16 @@ body {
   width: 75%;
   border: 1px solid black;
 }
+
+.edit_content {
+  position: relative;
+  float: left;
+  min-height: 682px;
+  display: block;
+  width: 100%;
+  border: 1px solid black;
+}
+
 .user {
   position: relative;
   float: right;
