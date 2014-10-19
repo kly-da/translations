@@ -14,8 +14,8 @@
     die();
   }
   
-  setcookie('uid', $uid);
-  setcookie('hash', $row["hash"]);
+  setcookie('uid', $uid, time() + 366 * 24 * 60 * 60);
+  setcookie('hash', $row["hash"], time() + 366 * 24 * 60 * 60);
   
   print "OK!!";
 ?>
