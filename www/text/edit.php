@@ -132,6 +132,33 @@ TEXT;
     return $subtitle_duration;
   }
 
+  function generateUserList() {
+    global $translators, $moderators, $administrators;
+    global $text_row;
+    $translators = array();
+    $moderators = array();
+    $administrators = array();
+
+    $query = 'SELECT `user_id`, `name`, `role` FROM `text_roles` INNER JOIN `user` USING(`user_id`) WHERE `text_id` = ' . $text_row["text_id"] . ' ORDER BY `name`';
+    $result = mysql_query($query);
+
+    while ($row = mysql_fetch_assoc($result)) {
+      $new_user = array("user_id" => $row["user_id"], "name" => $row["name"]);
+      switch ($row["role"]) {
+        case 0:
+          array_push($translators, $new_user);
+          break;
+        case 1:
+          array_push($moderators, $new_user);
+          break;
+        case 2:
+          array_push($administrators, $new_user);
+          break;
+      }
+    }
+    mysql_free_result($result);
+  }
+
   //=================================== Основной код
 
   $language = loadLanguage();
@@ -141,11 +168,13 @@ TEXT;
   } else if ($text_type_code == 1) {
     $subtitle_duration = generateSubtitleInfo();
   }
+  generateUserList();
 
   function additionalPageHeader() {
 ?>
   <link rel="stylesheet" type="text/css" href="/styles/text_edit.css">
   <script type="text/javascript" src="/scripts/jquery.validate.min.js"></script>
+  <script type="text/javascript" src="/scripts/jquery.textchange.min.js"></script>
   <script type="text/javascript" src="/scripts/text_edit.js"></script>
 <?}
 
@@ -154,108 +183,196 @@ TEXT;
 ?>
 
   <div class="content" style="border: 0px;">
-    <div>
-      <h1>Редактирование настроек<? if ($_GET["status"] == "ok") print " (сохранено)";?></h1>
-      <form id="login_form" action="edit_save.php" method="post">
-        <input type="hidden" name="operation" value="save" style="display: none;"/>
-        <input type="hidden" name="id" value="<? print $text_id; ?>" style="display: none;"/>
-        <fieldset>
-          <legend>Основные</legend>
-          <label>
-            <div class="form_input">
-              <span class="param_title">Название:</span>
-              <input class="wide_input" name="title" type="text" size="40" value="<? print $text_row["title"];?>"/>
-            </div>
-          </label>
-          <label>
-            <div class="form_input">
-              <span class="param_title">Оригинальное название:</span>
-              <input class="wide_input" name="original_title" type="text" size="40" value="<? print $text_row["original_title"];?>"/>
-            </div>
-          </label>
-          <label>
-            <div class="form_input">
-              <span class="param_title">Язык оригинала:</span>
-              <? print generateLanguageSelect("original_language", $text_row["original_language"]); ?>
-            </div>
-          </label>
-          <label>
-            <div class="form_input">
-              <span class="param_title">Язык перевода:</span>
-              <? print generateLanguageSelect("language", $text_row["language"]); ?>
-            </div>
-          </label>
-          <label>
-            <div class="form_input">
-              <span class="param_title">Тип:</span>
-              <span class="text_type"><? print $text_type; ?></span>
-            </div>
-          </label>
+    <h1>Редактирование настроек<? if ($_GET["status"] == "ok") print " (сохранено)";?></h1>
+    <form id="login_form" action="edit_save.php" method="post">
+      <input type="hidden" name="operation" value="save" />
+      <input type="hidden" name="id" value="<? print $text_id; ?>" />
+      <fieldset>
+        <legend>Основные</legend>
+        <label>
+          <div class="form_input">
+            <span class="param_title">Название:</span>
+            <input class="wide_input" name="title" type="text" value="<? print $text_row["title"];?>"/>
+          </div>
+        </label>
+        <label>
+          <div class="form_input">
+            <span class="param_title">Оригинальное название:</span>
+            <input class="wide_input" name="original_title" type="text" value="<? print $text_row["original_title"];?>"/>
+          </div>
+        </label>
+        <label>
+          <div class="form_input">
+            <span class="param_title">Язык оригинала:</span>
+            <? print generateLanguageSelect("original_language", $text_row["original_language"]); ?>
+          </div>
+        </label>
+        <label>
+          <div class="form_input">
+            <span class="param_title">Язык перевода:</span>
+            <? print generateLanguageSelect("language", $text_row["language"]); ?>
+          </div>
+        </label>
+        <label>
+          <div class="form_input">
+            <span class="param_title">Тип:</span>
+            <span class="text_type"><? print $text_type; ?></span>
+          </div>
+        </label>
 <?
   if ($text_type_code == 0) {
 ?>
-          <label>
-            <div class="form_input">
-              <span class="param_title">ISBN:</span>
-              <input name="isbn" type="text" size="40" value="<? print $book["isbn"]; ?>"/>
-            </div>
-          </label>
-          <label>
-            <div class="form_input">
-              <span class="param_title">Автор:</span>
-              <input name="author" type="text" size="40" value="<? print $book["author"]; ?>"/>
-            </div>
-          </label>
-          <label>
-            <div class="form_input">
-              <span class="param_title">Автор (ориг.):</span>
-              <input name="native_author" type="text" size="40" value="<? print $book["native_author"]; ?>"/>
-            </div>
-          </label>
-          <label>
-            <div class="form_input">
-              <span class="param_title">Год создания:</span>
-              <input name="release_date" type="text" size="40" value="<? print $book["release_date"]; ?>"/>
-            </div>
-          </label>
+        <label>
+          <div class="form_input">
+            <span class="param_title">ISBN:</span>
+            <input name="isbn" type="text" value="<? print $book["isbn"]; ?>"/>
+          </div>
+        </label>
+        <label>
+          <div class="form_input">
+            <span class="param_title">Автор:</span>
+            <input name="author" type="text" value="<? print $book["author"]; ?>"/>
+          </div>
+        </label>
+        <label>
+          <div class="form_input">
+            <span class="param_title">Автор (ориг.):</span>
+            <input name="native_author" type="text" value="<? print $book["native_author"]; ?>"/>
+          </div>
+        </label>
+        <label>
+          <div class="form_input">
+            <span class="param_title">Год создания:</span>
+            <input name="release_date" type="text" value="<? print $book["release_date"]; ?>"/>
+          </div>
+        </label>
 <?
   } else if ($text_type_code == 1) {
 ?>
-          <label>
-            <div class="form_input">
-              <span class="param_title">Длительность:</span>
-              <input name="duration" type="text" size="40" value="<? print $subtitle_duration; ?>"/>
-            </div>
-          </label>
+        <label>
+          <div class="form_input">
+            <span class="param_title">Длительность:</span>
+            <input name="duration" type="text" value="<? print $subtitle_duration; ?>"/>
+          </div>
+        </label>
 <?
   }
 ?>
-          <label>
-            <div class="form_input">
-              <span class="param_title">Описание:</span>
-              <textarea name="description" rows="5"><? print $text_row["description"]; ?></textarea>
-            </div>
-          </label>
-          <label>
-            <div class="form_input">
-              <span class="param_title"></span>
-              <input type="submit" value="Сохранить" />
-            </div>
-          </label>
-        </fieldset>
-      </form>
+        <label>
+          <div class="form_input">
+            <span class="param_title">Описание:</span>
+            <textarea name="description" rows="5"><? print $text_row["description"]; ?></textarea>
+          </div>
+        </label>
+        <label>
+          <div class="form_input">
+            <span class="param_title"></span>
+            <input type="submit" value="Сохранить" />
+          </div>
+        </label>
+      </fieldset>
+    </form>
+    <form id="access_form" action="edit_save.php" method="post">
+      <input type="hidden" name="operation" value="save_access" />
+      <input type="hidden" name="id" value="<? print $text_id; ?>" />
       <fieldset>
         <legend>Настройка доступа</legend>
-        <form id="accessform" action="edit_save.php" method="post">
-          <label>
-            <div class="form_input">
-              <span class="param_title">Открытость</span>
-              <? print generateAccessSelect(); ?> <input type="submit" style="margin-left: 50px;" value="Сохранить" />
-            </div>
-          </label>
-        </form>
+        <label>
+          <div class="form_input">
+            <span class="param_title">Открытость</span>
+            <? print generateAccessSelect(); ?> <input type="submit" style="margin-left: 50px;" value="Сохранить" />
+          </div>
+        </label>
       </fieldset>
-    </div>
+    </form>
+    <ul class="search_list"></ul>
+    <fieldset>
+      <legend>Пользователи</legend>
+<?
+  if ($text_row["access"] > 1) {
+?>
+      <form id="translator_form" class="user_form">
+        <label>
+          <div class="form_input">
+            <span class="param_title">Переводчики:</span>
+            <input id="translator_search" class="search_input" type="text" size="40"/>
+            <input id="translator_new_button" type="button" class="button add_function" value="Добавить"/>
+            <span class="ajax_status"></span>
+          </div>
+        </label>
+        <label>
+          <div class="form_input">
+            <span class="param_title"></span>
+            <select id="translators" size="8">
+<?
+    foreach ($translators as $user) {
+?>
+              <option value="<? print $user["id"]; ?>"><? print $user["name"]; ?></option>
+<?
+    }
+?>
+            </select>
+            <input id="translator_delete_button" type="button" class="button delete_function" value="Удалить"/>
+            <span class="ajax_status"></span>
+          </div>
+        </label>
+      </form>
+<?
+  }
+?>
+      <form id="moderator_form" class="user_form">
+        <label>
+          <div class="form_input">
+            <span class="param_title">Модераторы:</span>
+            <input id="moderator_search" class="search_input" type="text" size="40"/>
+            <input id="moderator_new_button" type="button" class="button add_function" value="Добавить"/>
+            <span class="ajax_status"></span>
+          </div>
+        </label>
+        <label>
+          <div class="form_input">
+            <span class="param_title"></span>
+            <select id="moderators" size="5">
+<?
+    foreach ($moderators as $user) {
+?>
+              <option value="<? print $user["id"]; ?>"><? print $user["name"]; ?></option>
+<?
+    }
+?>
+            </select>
+            <input id="moderator_delete_button" type="button" class="button delete_function" value="Удалить"/>
+            <span class="ajax_status"></span>
+          </div>
+        </label>
+      </form>
+      <form id="administrator_form" class="user_form">
+        <label>
+          <div class="form_input">
+            <span class="param_title">Администраторы:</span>
+            <input id="administrator_search" class="search_input" type="text" size="40"/>
+            <input id="administrator_new_button" type="button" class="button add_function" value="Добавить"/>
+            <span class="ajax_status"></span>
+          </div>
+        </label>
+        <label>
+          <div class="form_input">
+            <span class="param_title"></span>
+            <select id="administrators" size="5">
+<?
+    foreach ($administrators as $user) {
+?>
+              <option value="<? print $user["id"]; ?>"><? print $user["name"]; ?></option>
+<?
+    }
+?>
+            </select>
+            <input id="administrator_delete_button" type="button" class="button delete_function" value="Удалить"/>
+            <span class="ajax_status"></span>
+          </div>
+        </label>
+      </form>
+    </fieldset>
   </div>
   <div class="user">
     <div class="middle_text">Пользователь</div>

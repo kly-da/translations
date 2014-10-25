@@ -133,6 +133,10 @@
     case "save":
       saveText();
       break;
+    default:
+      header('Location: /');
+      die();
+      break;
   }
 
   $title = 'Ошибка сохранения';

@@ -10,8 +10,8 @@ input {
 	width: 150px;
 }
 
- input.wide_input {
-	width: 300px;
+input.wide_input {
+  width: 300px;
 }
 
 select {
@@ -27,4 +27,57 @@ textarea {
   font-size: 14px;
   margin-left: 0.5em;
   color: #f00;
+}
+
+.user_form input {
+	width: 180px;
+  vertical-align: top;
+}
+
+.user_form select {
+	width: 180px;
+}
+
+.user_form .button {
+  margin-left: 20px;
+	width: 150px;
+}
+
+.ajax_status {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.search_list {
+  font: 12px/18px sans-serif;
+  position: absolute;
+  width: 178px;
+  display: none;
+  margin: 0;
+  padding: 0;
+  border: 1px solid;
+  border-color: #fff;
+  border: 1px solid #000;
+  text-align: left;
+  list-style: none;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.search_list li {
+  padding: 5px;
+  background: #fff;
+  display: block;
+  color: #000;
+  word-break: break-all;
+  overflow: hidden;
+}
+
+.search_list li.not_found {
+  cursor: default;
+}
+
+.search_list li:hover {
+  background: #000;
+  color: #fff;
 }
