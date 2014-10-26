@@ -1,12 +1,18 @@
 var last_search_input = null;
 var last_search_index = 0;
+var text_id = 0;
 var search_list = null;
 var id = [ 0, 0, 0 ];
+
+function position_element() {
+  search_list.css('left', last_search_input.position().left);
+  search_list.css('top', last_search_input.position().top + last_search_input.outerHeight(true) - 1);
+}
 
 function get_user_list(e) {
   var element = $(e.target);
   var input = element.val();
-  if (element != last_search_input) {
+  if (element[0] != last_search_input[0]) {
     last_search_input = element;
     switch (element.attr('id')) {
       case "moderator_search":
@@ -18,25 +24,25 @@ function get_user_list(e) {
       default:
         last_search_index = 0;
     }
-    search_list.css('left', element.position().left);
-    search_list.css('top', element.position().top + element.outerHeight(true) - 1);
+    position_element();
   }
+
+  id[last_search_index] = 0;
 
   if (input.length >= 3 && input.length < 150) {
     $.ajax({
       type: "POST",
-      url: "search.php",
+      url: "modules/user_search.php",
       data: "q=" + input,
-      dataType: "html",
+      dataType: "json",
       cache: false,
       success: function(data) {
         search_list.empty();
-        var json = jQuery.parseJSON(data);
-        if (json.users.length == 0)
+        if (data.users.length == 0)
           search_list.append("<li class=\"not_found\">Пользователь не найден</li>");
         else
-          json.users.forEach(function(e) {
-            search_list.append("<li id=\"" + e.id + "\">" + e.name + "</li>");
+          data.users.forEach(function(e) {
+            search_list.append("<li id=\"" + e.user_id + "\">" + e.name + "</li>");
           });
         search_list.show();
       }
@@ -46,30 +52,41 @@ function get_user_list(e) {
   }
 }
 
+function getComponent(index) {
+  var component = new Object();
+  switch (index) {
+    case 0:
+      component.element = $('#translators');
+      component.list_name = "translators";
+      break
+    case 1:
+      component.element = $('#moderators');
+      component.list_name = "moderators";
+      break
+    case 2:
+      component.element = $('#administrators');
+      component.list_name = "administrators";
+      break
+    default:
+      return null;
+  }
+  return component;
+}
+
 function add_user(e) {
   var index = e.data.button_index;
   var input = id[index];
   if (input > 0) {
     var status = $(e.target).next('.ajax_status');
-    var component;
-    switch (index) {
-      case 0:
-        component = $('#translators');
-        break
-      case 1:
-        component = $('#moderators');
-        break
-      case 2:
-        component = $('#administrators');
-        break
-      default:
-        return;
-    }
+    var component = getComponent(index);
+    if (component == null)
+      return;
+
     $.ajax({
       type: "POST",
-      url: "search.php",
-      data: "q=" + input,
-      dataType: "html",
+      url: "modules/user_edit.php",
+      data: "com=add&list=" + component.list_name + "&text_id=" + text_id + "&user_id=" + input,
+      dataType: "json",
       cache: false,
       beforeSend: function() {
         status.html('Сохранение...');
@@ -78,37 +95,52 @@ function add_user(e) {
         status.html('Ошибка запроса');
       },
       success: function(data) {
-        status.html('Пользователь добавлен');
-        var json = jQuery.parseJSON(data);
-        component.append("<option value=\"" + json.users[2].id + "\">" + json.users[2].name + "</option>");
+        switch (data.status) {
+          case "ok":
+            status.html('Пользователь добавлен');
+            component.element.append("<option value=\"" + data.user.id + "\">" + data.user.name + "</option>");
+            break
+          case "fail":
+            status.html('Ошибка запроса');
+            break
+          case "user_null":
+            status.html('Пользователь не выбран');
+            break
+          case "already":
+            status.html('Пользователь уже добавлен');
+            break
+          case "list":
+            status.html('Пользователь добавлен');
+            $('option[value="' + data.user.id + '"]').remove();
+            component.element.append("<option value=\"" + data.user.id + "\">" + data.user.name + "</option>");
+            break
+          default:
+            status.html('');
+        }
       }
     });
+  } else {
+    $(e.target).next('.ajax_status').html('');
   }
 }
 
 function delete_user(e) {
-  var index = e.data.button_index;
-  var component;
-  switch (index) {
-    case 0:
-      component = $('#translators');
-      break
-    case 1:
-      component = $('#moderators');
-      break
-    case 2:
-      component = $('#administrators');
-      break
-    default:
-      return;
-  }
-  var input = component.val();
+  var component = getComponent(e.data.button_index);
+  if (component == null)
+    return;
+
+  var input = component.element.val();
   var status = $(e.target).next('.ajax_status');
+  if (input == null || input <= 0) {
+    status.html('');
+    return;
+  }
+
   $.ajax({
     type: "POST",
-    url: "search.php",
-    data: "q=" + input,
-    dataType: "html",
+    url: "modules/user_edit.php",
+    data: "com=delete&list=" + component.list_name + "&text_id=" + text_id + "&user_id=" + input,
+    dataType: "json",
     cache: false,
     beforeSend: function() {
       status.html('Сохранение...');
@@ -117,8 +149,23 @@ function delete_user(e) {
       status.html('Ошибка запроса');
     },
     success: function(data) {
-      status.html("Удалено");
-      component.find('option[value="' + input + '"]').remove();
+      switch (data.status) {
+        case "ok":
+          status.html("Удалено");
+          component.element.find('option[value="' + input + '"]').remove();
+          break
+        case "fail":
+          status.html('Ошибка запроса');
+          break
+        case "user_null":
+          status.html('Пользователь не выбран');
+          break
+        case "not_found":
+          status.html('Пользователь не найден');
+          break
+        default:
+          status.html('');
+      }
     }
   });
 }
@@ -199,4 +246,10 @@ $(document).ready(function(){
       search_list.hide();
     }
   });
+
+  text_id = $("input:hidden:[name='id']:first").val();
+
+  last_search_input = $("#translator_search");
+  last_search_index = 0;
+  position_element();
 });

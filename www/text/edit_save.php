@@ -66,7 +66,7 @@
     if (!$result) {
       echo mysql_errno() . ": " . mysql_error() . "\n";
       array_push($error, "Во время сохранения произошла ошибка базы данных");
-      die();
+      return;
     }
   }
 
@@ -125,6 +125,25 @@
     }
   }
 
+  function saveAccess() {
+    global $error, $text_row, $text_id;
+    $access_code = intval($_POST["access"]);
+    if ($access_code <= 0 || $access_code > 4) {
+      array_push($error, "Ошибка сохранения");
+      return;
+    }
+    $query = "UPDATE `text`
+    SET
+      `access` = $access_code
+    WHERE
+      `text_id` = $text_id";
+    executeQuery($query);
+    if (count($error) > 0)
+      return;
+    header('Location: edit.php?id=' . $text_id . '&status=ok');
+    die();
+  }
+
   //=================================== Основной код
 
   $error = array();
@@ -132,6 +151,9 @@
   switch ($_POST["operation"]) {
     case "save":
       saveText();
+      break;
+    case "save_access":
+      saveAccess();
       break;
     default:
       header('Location: /');

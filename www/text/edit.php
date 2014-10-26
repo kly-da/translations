@@ -50,7 +50,7 @@
     $selected = array(1 => "", 2 => "", 3 => "", 4 => "",);
     $selected[$text_row["access"]] = " selected";
     $text = <<<TEXT
-<select name="original_language">
+<select name="access">
                 <option value="1"$selected[1]>открытый</option>
                 <option value="2"$selected[2]>по приглашениям</option>
                 <option value="3"$selected[3]>закрытый</option>
@@ -307,7 +307,7 @@ TEXT;
 <?
     foreach ($translators as $user) {
 ?>
-              <option value="<? print $user["id"]; ?>"><? print $user["name"]; ?></option>
+              <option value="<? print $user["user_id"]; ?>"><? print $user["name"]; ?></option>
 <?
     }
 ?>
@@ -336,7 +336,7 @@ TEXT;
 <?
     foreach ($moderators as $user) {
 ?>
-              <option value="<? print $user["id"]; ?>"><? print $user["name"]; ?></option>
+              <option value="<? print $user["user_id"]; ?>"><? print $user["name"]; ?></option>
 <?
     }
 ?>
@@ -362,7 +362,7 @@ TEXT;
 <?
     foreach ($administrators as $user) {
 ?>
-              <option value="<? print $user["id"]; ?>"><? print $user["name"]; ?></option>
+              <option value="<? print $user["user_id"]; ?>"><? print $user["name"]; ?></option>
 <?
     }
 ?>
@@ -373,6 +373,7 @@ TEXT;
         </label>
       </form>
     </fieldset>
+    <a href="view.php?id=<? print $text_row["text_id"]; ?>">Вернуться назад...</a>
   </div>
   <div class="user">
     <div class="middle_text">Пользователь</div>

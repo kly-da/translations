@@ -68,6 +68,24 @@
       mysql_free_result($result);
     }
 
+    public function loadTextOutById($text_id) {
+      if ($this -> group < 0) {
+        $this -> role = -1;
+        return;
+      }
+      $query = 'SELECT `creator` FROM `text` WHERE `text_id` = ' . $text_id;
+      $result = mysql_query($query);
+      $row = mysql_fetch_assoc($result);
+      if (!$row) {
+        $this -> role = -1;
+        return;
+      } else {
+        $text_row = array("text_id" => $text_id, "creator" => $row["creator"]);
+        mysql_free_result($result);
+        $this -> loadTextOut($text_row);
+      }
+    }
+
     public function isRegistered() {
       return $this -> group >= 0;
     }
