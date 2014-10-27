@@ -16,8 +16,13 @@
   mysql_query("SET NAMES utf8");
 
   $query = 'SELECT `text`.*, `user`.`name` AS `creator_name` FROM `text` JOIN `user` ON(`creator` = `user_id`) WHERE `text_id` = ' . $text_id;
+  $fragment_query = 'SELECT `fragment_id`, `text` FROM `original_fragments` WHERE `text_id` = ' . $text_id;
+  
   $result = mysql_query($query);
+  $fragment_result = mysql_query($fragment_query);
+  
   $text_row = mysql_fetch_assoc($result);
+  
   if (!$text_row) {
     header('Location: /error/text_not_found.php');
     die();
@@ -31,7 +36,7 @@
   }
   function additionalPageHeader() {
 ?>
-  <link rel="stylesheet" type="text/css" href="/styles/text_main.css">
+  <link rel="stylesheet" type="text/css" href="/styles/chapter_main.css">
 <?}
 
   $title = 'Редактирование';
@@ -45,31 +50,26 @@
     <div>
 		
 		<table id="translate_table" width=100% border="1" style='padding: 1px;'>
+			
 			<tr>
+				<th>№</th>
 				<th>Отрывок</th>
 				<th>Перевод</th>
 			</tr>
-			<tr>
-				<td rowspan="3">London is the capital of Great Britain.</td>
-				<td>Лондон — столица Великобритании</td>
-			</tr>
-			<tr>
-				<td>Лондон — это столица Великобритании.</td>
-			</tr>
-			<tr>
-				<td>Лондон — это столица Англии.</td>
-			</tr>
-			<tr>
-				<td rowspan="3">Hello! My name is Petr.</td>
-				<td>Привет! Меня зовут Пётр.</td>
-			</tr>
-			<tr>
-				<td>Привет, я Петр.</td>
-			</tr>
-			<tr>
-				<td>Привет, я Денис.</td>
-			</tr>
+		
+		<?
+			$i = 0;
+			while ( $fragment_row = mysql_fetch_assoc($fragment_result))
+			{
+
+				$i++;
+				print "<tr><td>" . $i . "</td><td>" . $fragment_row["text"] . "</td><td>Пока нет перевода.</td></tr>";
+				print "\n";
+		    }
+	    ?>
+		
 		</table>
+		
 		<br>
 		
     </div>
