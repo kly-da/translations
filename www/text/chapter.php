@@ -61,9 +61,33 @@
 			$i = 0;
 			while ( $fragment_row = mysql_fetch_assoc($fragment_result))
 			{
+				
+				$trans_query = 'SELECT `translation_id`, `fragment_id`, `text` FROM `translations` WHERE 
+					`fragment_id` = ' . $fragment_row["fragment_id"];
+				$trans_result = mysql_query($trans_query);
+				
+				$rows_count = mysql_num_rows($trans_result);
+				$first_row = mysql_fetch_assoc($trans_result);
+				
+				if (!$rows_count)
+					$rows_count = 1;
 
 				$i++;
-				print "<tr><td>" . $i . "</td><td>" . $fragment_row["text"] . "</td><td>Пока нет перевода.</td></tr>";
+				print "<tr><td rowspan=\"" . $rows_count . "\">" . $i . "</td>
+					<td rowspan=\"" . $rows_count . "\">" . $fragment_row["text"] . "</td>";
+				
+				if ($first_row)
+				{
+					print "<td>" . $first_row["text"] . "</td></tr>";
+				}
+				else
+				{
+					print "<td>Пока переводов нет.</td></tr>";
+				}
+				while ($trans_row = mysql_fetch_assoc($trans_result))
+				{
+					print "<tr><td>" . $trans_row["text"] . "</td></tr>";
+				}
 				print "\n";
 		    }
 	    ?>
