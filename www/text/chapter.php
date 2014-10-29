@@ -54,7 +54,7 @@
 			<tr>
 				<th>№</th>
 				<th>Отрывок</th>
-				<th>Перевод</th>
+				<th colspan=3>Перевод</th>
 			</tr>
 		
 		<?
@@ -78,15 +78,21 @@
 				
 				if ($first_row)
 				{
-					print "<td>" . $first_row["text"] . "</td></tr>";
+					print "<td>" . $first_row["text"] . "</td>
+						<td><input type=\"button\" value=\"Like\"></td>
+						<td><input type=\"button\" value=\"Disike\"></td>
+						</tr>";
 				}
 				else
 				{
-					print "<td>Пока переводов нет.</td></tr>";
+					print "<td colspan=3>Пока переводов нет.</td></tr>";
 				}
 				while ($trans_row = mysql_fetch_assoc($trans_result))
 				{
-					print "<tr><td>" . $trans_row["text"] . "</td></tr>";
+					print "<tr><td>" . $trans_row["text"] . "</td>
+						<td><input type=\"button\" value=\"Like\"></td>
+						<td><input type=\"button\" value=\"Disike\"></td>
+						</tr>";
 				}
 				print "\n";
 		    }
