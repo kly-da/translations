@@ -166,7 +166,7 @@
 }
 
 #chapter_table th, #chapter_table td {
-  padding-right: 10px;
+  padding: 4px 10px 4px 0;
   text-align: center;
   vertical-align: top;
   white-space: nowrap;
