@@ -40,8 +40,6 @@
 
   $object_id = $_POST["id"];
   if (checkCount() > 0) {
-      die(json_encode(array("status" => "already"), 256));
-  } else {
     $uid = $user -> uid;
     $query = "INSERT INTO `complaint`
       (`type`,
