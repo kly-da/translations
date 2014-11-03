@@ -290,7 +290,7 @@
   }
 ?>
       </table>
-      <a id="text_complaint" class="complaint" href="111">Пожаловаться на перевод</a>
+      <a id="text_complaint" text_id="<? print $text_id;?>" class="complaint" href="#">Пожаловаться на перевод</a>
       <ul class="text_menu">
 <?
   if ($user -> isManageUser() || $user -> isTextAdministratorOrCreator()) {
