@@ -39,7 +39,7 @@
   //=================================== Основной код
 
   $object_id = $_POST["id"];
-  if (checkCount() > 0) {
+  if (checkCount() == 0) {
     $uid = $user -> uid;
     $query = "INSERT INTO `complaint`
       (`type`,
