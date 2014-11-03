@@ -6,7 +6,7 @@
     print $title;
   else
     print $title . " - Система коллективных переводов";
-  ?></title>  
+  ?></title>
   <script type="text/javascript" src="/scripts/jquery-1.7.2.min.js"></script>
   <link rel="icon" type="image/png" href="/images/favicon.png" />
   <link rel="stylesheet" type="text/css" href="/styles/main.css">
