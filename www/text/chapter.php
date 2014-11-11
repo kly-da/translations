@@ -22,7 +22,7 @@
 	mysql_query("SET NAMES utf8");
 
 	$text_query = 'SELECT `text`.*, `user`.`name` AS `creator_name` FROM `text` JOIN `user` ON(`creator` = `user_id`) WHERE `text_id` = ' . $text_id;
-	$fragment_query = 'SELECT `fragment_id`, `text` FROM `original_fragments` WHERE `text_id` = ' . $text_id;
+	$fragment_query = 'SELECT `fragment_id`, `text` FROM `fragment` WHERE `text_id` = ' . $text_id;
 
 	$text_result = mysql_query($text_query);
 	$fragment_result = mysql_query($fragment_query);
@@ -56,7 +56,7 @@ function gen_chapter_table_content($text_result, $fragment_result)
 	while ($fragment_row = mysql_fetch_assoc($fragment_result))
 	{
 		
-		$trans_query = 'SELECT `translation_id`, `fragment_id`, `text` FROM `translations` WHERE 
+		$trans_query = 'SELECT `translation_id`, `fragment_id`, `text` FROM `translation` WHERE 
 			`fragment_id` = ' . $fragment_row["fragment_id"];
 		$trans_result = mysql_query($trans_query);
 		
