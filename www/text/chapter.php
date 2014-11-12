@@ -89,6 +89,34 @@ function gen_add_row($rows_count, $frag_num)
 	</td>";	
 }
 
+function gen_frag_translations($fragment_row, $fragment_number)
+{
+	
+	$trans_query = 'SELECT `translation_id`, `fragment_id`, `text` FROM `translation` WHERE 
+		`fragment_id` = ' . $fragment_row["fragment_id"];
+	$trans_result = mysql_query($trans_query);
+	
+	$rows_count = mysql_num_rows($trans_result) + 1;
+
+	
+	print "<tr><td rowspan=\"" . $rows_count . "\">" . $fragment_number . "</td>
+		<td rowspan=\"" . $rows_count . "\">" . $fragment_row["text"] . "</td>";
+	
+	while ($trans_row = mysql_fetch_assoc($trans_result))
+	{
+		print "<td>" . $trans_row["text"] . "</td>
+			<td><input type=\"button\" value=\"+\"></td>
+			<td><input type=\"button\" value=\"-\"></td>
+			</tr>";
+		print "<tr>";
+	}
+	gen_add_row($rows_count, $fragment_number);
+					
+	print "</tr>\n";
+	
+	
+}
+
 function gen_chapter_table_content($text_result, $fragment_result)
 {
 	
@@ -96,27 +124,9 @@ function gen_chapter_table_content($text_result, $fragment_result)
 	while ($fragment_row = mysql_fetch_assoc($fragment_result))
 	{
 		
-		$trans_query = 'SELECT `translation_id`, `fragment_id`, `text` FROM `translation` WHERE 
-			`fragment_id` = ' . $fragment_row["fragment_id"];
-		$trans_result = mysql_query($trans_query);
-		
-		$rows_count = mysql_num_rows($trans_result) + 1;
-
 		$i++;
-		print "<tr><td rowspan=\"" . $rows_count . "\">" . $i . "</td>
-			<td rowspan=\"" . $rows_count . "\">" . $fragment_row["text"] . "</td>";
+		gen_frag_translations($fragment_row, $i);
 		
-		while ($trans_row = mysql_fetch_assoc($trans_result))
-		{
-			print "<td>" . $trans_row["text"] . "</td>
-				<td><input type=\"button\" value=\"+\"></td>
-				<td><input type=\"button\" value=\"-\"></td>
-				</tr>";
-			print "<tr>";
-		}
-		gen_add_row($rows_count, $i);
-						
-		print "</tr>\n";
 	}
 	
 }
