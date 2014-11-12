@@ -43,26 +43,48 @@
 	}
 	
 	#==== Load database =======================
+?>
+
+<script type="text/javascript" src="../scripts/jquery-1.7.2.min.js"></script>
+<script>
+	$(document).ready(function(){
+		$('#translate_table').on('click', '.add', function(event) {
+			var $num = $(this).attr('data-id');
+			jQuery("#form_" + $num).toggle('show');
+			$('#add_content_' + $num).toggle('show');
+		});
+	});
+	
+	$(document).ready(function(){
+		$('#translate_table').on('click', '.cancel', function(event) {
+			var $num = $(this).attr('data-id');
+			jQuery("#add_content_" + $num).toggle('show');
+			$("#form_" + $num).toggle('show');
+		});
+	});
+</script>
+	
+<?
 	
 function like()
 {
 	echo "Like!";
 }
 
-function gen_add_row($rows_count)
+function gen_add_row($rows_count, $frag_num)
 {
 	if ($rows_count == 1)
-		print "<td colspan=3>Пока переводов нет.";
+		print "<td colspan=3><div id=\"add_content_" . $frag_num . "\">Пока переводов нет.";
 	else
-		print "<td colspan=3>";
-	print "<input type=\"button\" value=\"Add...\">
-		<div>
-		<form method=\"POST\" action=\"chapter.php\">
-		Перевод:<br>
-		<textarea style=\"width: 100%\" rows=\"10\" name=\"first_name\"></textarea><br>
-		<input type=\"submit\" value=\"Ок\">
-		<input type=\"submit\" value=\"Отмена\">
-		</form>
+		print "<td colspan=3><div id=\"add_content_" . $frag_num . "\">";
+	print "<input type=\"button\" class=\"add\" value=\"Add...\" data-id=\"" . $frag_num . "\"></div>
+		<div id=\"form_" . $frag_num . "\" style=\"display: none\">
+			<form method=\"POST\" action=\"chapter.php\">
+				Перевод:<br>
+				<textarea style=\"width: 100%\" rows=\"10\" name=\"first_name\"></textarea><br>
+				<input type=\"submit\" value=\"Ок\">
+				<input type=\"button\" class=\"cancel\" value=\"Отмена\" data-id=\"" . $frag_num . "\">
+			</form>
 		</div>
 	</td>";	
 }
@@ -92,7 +114,7 @@ function gen_chapter_table_content($text_result, $fragment_result)
 				</tr>";
 			print "<tr>";
 		}
-		gen_add_row($rows_count);
+		gen_add_row($rows_count, $i);
 						
 		print "</tr>\n";
 	}
@@ -100,37 +122,36 @@ function gen_chapter_table_content($text_result, $fragment_result)
 }
   
 ?>
-  <link rel="stylesheet" type="text/css" href="/styles/chapter_main.css">
+	<link rel="stylesheet" type="text/css" href="/styles/chapter_main.css">
 <?
-  $title = 'Редактирование';
-  include('../header.php');
+	$title = 'Редактирование';
+	include('../header.php');
 ?>
 
-  <div class="edit_content" style="border: 0px;">
-    <div>
-      <div id="title_header"><? print $text_row["title"] . " — Глава " . $chapter_id;?></div>
-    </div>
-    <div>
-		
-		<table id="translate_table" width=100% border="1" style='padding: 1px;'>
+	<div class="edit_content" style="border: 0px;">
+		<div>
+			<div id="title_header"><? print $text_row["title"] . " — Глава " . $chapter_id;?></div>
+		</div>
+		<div>
+			<table id="translate_table" width=100% border="1" style='padding: 1px;'>
+				
+				<tr>
+					<th>№</th>
+					<th>Отрывок</th>
+					<th colspan=3>Перевод</th>
+				</tr>
 			
-			<tr>
-				<th>№</th>
-				<th>Отрывок</th>
-				<th colspan=3>Перевод</th>
-			</tr>
-		
-		<?
-			gen_chapter_table_content($text_result, $fragment_result);
-	    ?>
-		
-		</table>
-		
-		<br>
-		
-    </div>
-  </div>
-  <div style="clear:right;"/></div>
+			<?
+				gen_chapter_table_content($text_result, $fragment_result);
+			?>
+			
+			</table>
+			
+			<br>
+			
+		</div>
+	</div>
+	<div style="clear:right;"/></div>
   
 
 <? include('../footer.php');?>
