@@ -44,9 +44,27 @@
 	
 	#==== Load database =======================
 	
-	function like()
+function like()
 {
 	echo "Like!";
+}
+
+function gen_add_row($rows_count)
+{
+	if ($rows_count == 1)
+		print "<td colspan=3>Пока переводов нет.";
+	else
+		print "<td colspan=3>";
+	print "<input type=\"button\" value=\"Add...\">
+		<div>
+		<form method=\"POST\" action=\"chapter.php\">
+		Перевод:<br>
+		<textarea style=\"width: 100%\" rows=\"10\" name=\"first_name\"></textarea><br>
+		<input type=\"submit\" value=\"Ок\">
+		<input type=\"submit\" value=\"Отмена\">
+		</form>
+		</div>
+	</td>";	
 }
 
 function gen_chapter_table_content($text_result, $fragment_result)
@@ -61,33 +79,22 @@ function gen_chapter_table_content($text_result, $fragment_result)
 		$trans_result = mysql_query($trans_query);
 		
 		$rows_count = mysql_num_rows($trans_result) + 1;
-		$first_row = mysql_fetch_assoc($trans_result);
 
 		$i++;
 		print "<tr><td rowspan=\"" . $rows_count . "\">" . $i . "</td>
 			<td rowspan=\"" . $rows_count . "\">" . $fragment_row["text"] . "</td>";
 		
-		if ($first_row)
+		while ($trans_row = mysql_fetch_assoc($trans_result))
 		{
-			print "<td>" . $first_row["text"] . "</td>
-				<td><input type=\"button\" value=\"Like\"></td>
-				<td><input type=\"button\" value=\"Disike\"></td>
+			print "<td>" . $trans_row["text"] . "</td>
+				<td><input type=\"button\" value=\"+\"></td>
+				<td><input type=\"button\" value=\"-\"></td>
 				</tr>";
-			while ($trans_row = mysql_fetch_assoc($trans_result))
-			{
-				print "<tr><td>" . $trans_row["text"] . "</td>
-					<td><input type=\"button\" value=\"Like\"></td>
-					<td><input type=\"button\" value=\"Disike\"></td>
-					</tr>";
-			}
-			print "<tr><td colspan=3><input type=\"button\" value=\"Add...\"></td></tr>";
+			print "<tr>";
 		}
-		else
-		{
-			print "<td colspan=3>Пока переводов нет. <input type=\"button\" value=\"Add...\"></td></tr>";
-		}
+		gen_add_row($rows_count);
 						
-		print "\n";
+		print "</tr>\n";
 	}
 	
 }
