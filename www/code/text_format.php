@@ -14,9 +14,9 @@
         return "вчера";
       else {
         if (date('y', $tms) == date('y', time())) {
-          return date('j', $tms) . ' ' . $this -> month[date('n', $tms)] . ' ' . date('y', $tms);
-        } else {
           return date('j', $tms) . ' ' . $this -> month[date('n', $tms)];
+        } else {
+          return date('j', $tms) . ' ' . $this -> month[date('n', $tms)] . ' ' . date('y', $tms);
         }
       }
     }
