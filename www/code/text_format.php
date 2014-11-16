@@ -13,8 +13,22 @@
       else if (date('Ymd', time() - 60 * 60 * 24) == date('Ymd', $tms))
         return "вчера";
       else {
-        return date('j', $tms) . ' ' . $this -> month[date('n', $tms)] . ' ' . date('y', $tms);
+        if (date('y', $tms) == date('y', time())) {
+          return date('j', $tms) . ' ' . $this -> month[date('n', $tms)] . ' ' . date('y', $tms);
+        } else {
+          return date('j', $tms) . ' ' . $this -> month[date('n', $tms)];
+        }
       }
+    }
+
+    public function toStringChangedDateWithYear($timestamp) {
+      $tms = strtotime($timestamp);
+      if (date('Ymd') == date('Ymd', $tms))
+        return "сегодня";
+      else if (date('Ymd', time() - 60 * 60 * 24) == date('Ymd', $tms))
+        return "вчера";
+      else
+        return date('j', $tms) . ' ' . $this -> month[date('n', $tms)] . ' ' . date('y', $tms);
     }
 
   }
