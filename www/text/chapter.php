@@ -6,7 +6,7 @@
 	$chapter_id = intval($_GET["chapter_id"]);
 	if ($text_id <= 0 || $chapter_id <= 0)
 	{
-		header('Location: /');
+		#header('Location: /');
 		die();
     }
     
@@ -20,6 +20,16 @@
 	include('../code/text_format.php');
 
 	mysql_query("SET NAMES utf8");
+
+	if ($_POST['text'])
+	{
+		$insert_query = 'INSERT INTO `translation` (fragment_id, length, user_id, text)
+						VALUES (\'' . $_POST['fragment_id'] . '\', 
+						\'' . $_POST['length'] . '\', 
+						\'' . $_POST['user_id'] . '\', 
+						\'' . $_POST['text'] . '\')';
+		mysql_query($insert_query);
+	}
 
 	$text_query = 'SELECT `text`.*, `user`.`name` AS `creator_name` FROM `text` JOIN `user` ON(`creator` = `user_id`) WHERE `text_id` = ' . $text_id;
 	$fragment_query = 'SELECT `fragment_id`, `text` FROM `fragment` WHERE `text_id` = ' . $text_id;
@@ -71,17 +81,22 @@ function like()
 	echo "Like!";
 }
 
-function gen_add_row($rows_count, $frag_num)
+function gen_add_row($rows_count, $frag_num, $frag_id)
 {
+	global $text_id, $chapter_id;
+	
 	if ($rows_count == 1)
 		print "<td colspan=3><div id=\"add_content_" . $frag_num . "\">Пока переводов нет.";
 	else
 		print "<td colspan=3><div id=\"add_content_" . $frag_num . "\">";
 	print "<input type=\"button\" class=\"add\" value=\"Add...\" data-id=\"" . $frag_num . "\"></div>
 		<div id=\"form_" . $frag_num . "\" style=\"display: none\">
-			<form method=\"POST\" action=\"chapter.php\">
+			<form method=\"post\" action=\"chapter.php?text_id=" . $text_id . "&chapter_id=" . $chapter_id . "\">
 				Перевод:<br>
-				<textarea style=\"width: 100%\" rows=\"10\" name=\"first_name\"></textarea><br>
+				<textarea style=\"width: 100%\" rows=\"10\" name=\"text\"></textarea><br>
+				<input type=\"hidden\" name=\"fragment_id\" value=\"" . $frag_id . "\">
+				<input type=\"hidden\" name=\"length\" value=\"1\">
+				<input type=\"hidden\" name=\"user_id\" value=\"1\">
 				<input type=\"submit\" value=\"Ок\">
 				<input type=\"button\" class=\"cancel\" value=\"Отмена\" data-id=\"" . $frag_num . "\">
 			</form>
@@ -110,7 +125,7 @@ function gen_frag_translations($fragment_row, $fragment_number)
 			</tr>";
 		print "<tr>";
 	}
-	gen_add_row($rows_count, $fragment_number);
+	gen_add_row($rows_count, $fragment_number, $fragment_row["fragment_id"]);
 					
 	print "</tr>\n";
 	
