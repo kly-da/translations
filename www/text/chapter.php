@@ -6,7 +6,7 @@
 	$chapter_id = intval($_GET["chapter_id"]);
 	if ($text_id <= 0 || $chapter_id <= 0)
 	{
-		#header('Location: /');
+		header('Location: /');
 		die();
     }
     
@@ -73,13 +73,32 @@
 		});
 	});
 </script>
+<script>
+	$(document).ready(function(){
+		$('#translate_table').on('click', '.rate', function(event) {
+			var $num = $(this).attr('data-id');
+			var $mark = $(this).attr('mark');
+			
+			$.get("rate.php", {trans_id: $num, user_id: "1", mark: $mark}, function(ok) {
+					if ($mark == "1")
+					{
+						var $likes = +($("#like_" + $num).text()) + 1;
+						$("#like_" + $num).text($likes);
+					}
+					else if ($mark == "-1")
+					{
+						var $dislikes = +($("#dislike_" + $num).text()) + 1;
+						$("#dislike_" + $num).text($dislikes);
+					}
+				}
+			);
+			
+		});
+	});
+		
+</script>
 	
 <?
-	
-function like()
-{
-	echo "Like!";
-}
 
 function gen_add_row($rows_count, $frag_num, $frag_id)
 {
@@ -112,16 +131,26 @@ function gen_frag_translations($fragment_row, $fragment_number)
 	$trans_result = mysql_query($trans_query);
 	
 	$rows_count = mysql_num_rows($trans_result) + 1;
-
 	
 	print "<tr><td rowspan=\"" . $rows_count . "\">" . $fragment_number . "</td>
 		<td rowspan=\"" . $rows_count . "\">" . $fragment_row["text"] . "</td>";
 	
 	while ($trans_row = mysql_fetch_assoc($trans_result))
 	{
+		$trans_id = $trans_row["translation_id"];
+		$trans_like = mysql_num_rows(mysql_query('SELECT `rating_id`, `translation_id`, `mark` FROM `rating` WHERE
+			`translation_id` = ' . $trans_id . ' AND `mark` = 1'));
+		$trans_dislike = mysql_num_rows(mysql_query('SELECT `rating_id`, `translation_id`, `mark` FROM `rating` WHERE
+			`translation_id` = ' . $trans_id . ' AND `mark` = -1'));
 		print "<td>" . $trans_row["text"] . "</td>
-			<td><input type=\"button\" value=\"+\"></td>
-			<td><input type=\"button\" value=\"-\"></td>
+				<td>
+					<input type=\"button\" class=\"rate\" mark=\"1\" data-id=\"" . $trans_id . "\" value=\"+\">
+					<span id=\"like_" . $trans_id . "\">" . $trans_like . "</span>
+				</td>
+				<td>
+					<input type=\"button\" class=\"rate\" mark=\"-1\" data-id=\"" . $trans_id . "\" value=\"-\">
+					<span id=\"dislike_" . $trans_id . "\">" . $trans_dislike . "</span>
+				</td>
 			</tr>";
 		print "<tr>";
 	}
