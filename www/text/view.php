@@ -109,6 +109,9 @@
       case 1:
         $text_type = "субтитры";
         break;
+      default:
+        $text_type = "прочий текст";
+        break;
     }
     return $text_type;
   }

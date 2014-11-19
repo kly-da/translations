@@ -2,6 +2,37 @@ body {
   font: "Times New Roman", sans-serif;
 }
 
+h1 {
+  font-size: 18pt;
+  font-family: "Tahoma", sans-serif;
+  font-weight: 700;
+  margin: 0 0 20px 0;
+}
+
+fieldset {
+  background-color: #eee;
+}
+
+fieldset  legend {
+  font-size: 12pt;
+  font-family: "Tahoma", sans-serif;
+  background-color: #eee;
+  padding: 0 5px 2px;
+}
+
+div.form_input {
+  display: block;
+  margin: 1em 0 0.4em;
+  vertical-align: top;
+}
+
+span.param_title {
+  display: inline-block;
+  padding-top: 1px;
+  width: 180px;
+  vertical-align: top;
+}
+
 .header {
   position: relative;
   display: block;
