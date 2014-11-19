@@ -32,11 +32,14 @@
 	}
 
 	$text_query = 'SELECT `text`.*, `user`.`name` AS `creator_name` FROM `text` JOIN `user` ON(`creator` = `user_id`) WHERE `text_id` = ' . $text_id;
-	$fragment_query = 'SELECT `fragment_id`, `text` FROM `fragment` WHERE `text_id` = ' . $text_id;
+	$chapter_query = 'SELECT `chapter_name`, `chapter_number` FROM `chapter` WHERE `chapter_id` = ' . $chapter_id;
+	$fragment_query = 'SELECT `fragment_id`, `text` FROM `fragment` WHERE `chapter_id` = ' . $chapter_id;
 
 	$text_result = mysql_query($text_query);
+	$chapter_result = mysql_query($chapter_query);
 	$fragment_result = mysql_query($fragment_query);
 
+	$chapter_row = mysql_fetch_assoc($chapter_result);
 	$text_row = mysql_fetch_assoc($text_result);
 
 	if (!$text_row) {
@@ -184,7 +187,8 @@ function gen_chapter_table_content($text_result, $fragment_result)
 
 	<div class="edit_content" style="border: 0px;">
 		<div>
-			<div id="title_header"><? print $text_row["title"] . " — Глава " . $chapter_id;?></div>
+			<div id="title_header"><? print $text_row["title"] . " — Глава " . $chapter_row["chapter_number"]. 
+				". " . $chapter_row["chapter_name"];?></div>
 		</div>
 		<div>
 			<table id="translate_table" width=100% border="1" style='padding: 1px;'>
