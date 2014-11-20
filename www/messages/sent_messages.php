@@ -1,4 +1,4 @@
-﻿<?PHP
+<?PHP
 	include('../mod_db.php');
 	include('../mod_auth.php');
 	

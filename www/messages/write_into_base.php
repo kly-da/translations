@@ -1,4 +1,4 @@
-﻿<?PHP
+<?PHP
 	//header('Location: index.php');
 	include('../mod_db.php');
 	include('../mod_auth.php');
@@ -24,15 +24,21 @@
 		$sqlQueryInsert = "INSERT INTO `message` VALUES (NULL,'$id','$id_user_to','$text',NULL,0,0,0)";
 		$rs = mysql_query($sqlQueryInsert);
 	}
-	
+
+  function additionalPageHeader() {
+?>
+  <link rel="stylesheet" type="text/css" href="/styles/message_index.css">
+<?}
+
+  $title = "Входящие";
 	include('../header.php');
 	
 ?>
   <div class="content">
-	<div class="menu_head">
-		<a href="index.php">Входящие</a>
-	</div>
-	<div id="message_content" class="message_area" > Письмо успешно отправлено!
+    <div class="menu_head">
+      <a href="index.php">Входящие</a>
+    </div>
+    <div id="message_content" class="message_area" > Письмо успешно отправлено!
 	</div>
  
   </div>

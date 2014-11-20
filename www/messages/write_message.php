@@ -1,4 +1,4 @@
-﻿<?PHP
+<?PHP
 	include('../mod_db.php');
 	include('../mod_auth.php');
 	
@@ -19,6 +19,12 @@
 		echo "<div class=\"full_message\">Сообщение от: <font color=\"red\">". $name[0]."</font> в " . $row['date_sending'] . "<br /> " . $row['text'] . "<br /></div>";
 	}
 	else {
+    function additionalPageHeader() {
+?>
+  <link rel="stylesheet" type="text/css" href="/styles/message_index.css">
+<?  }
+
+    $title = "Текст письма";
 		include('../header.php');
 		echo "<form id=\"answer_form\" name=\"answer_form\" method=\"post\" action=\"write_into_base.php\"> Получатель <input type=\"text\" name=\"recipient\" id=\"recipient\" class=\"recipient\"/>";
 	}	
