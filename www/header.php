@@ -11,7 +11,6 @@
   <link rel="icon" type="image/png" href="/images/favicon.png" />
   <link rel="stylesheet" type="text/css" href="/styles/main.css">
   <link rel="stylesheet" type="text/css" href="/styles/font.css">
-  <link rel="stylesheet" type="text/css" href="/styles/message_index.css">
 <?php 
   if (function_exists('additionalPageHeader')){
   additionalPageHeader();

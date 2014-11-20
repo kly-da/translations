@@ -7,6 +7,11 @@
   
   //Код компонента - здесь
 
+  function additionalPageHeader() {
+?>
+  <link rel="stylesheet" type="text/css" href="/styles/message_index.css">
+<?}
+
   $title = "Сообщения";
   include('../header.php');
  
