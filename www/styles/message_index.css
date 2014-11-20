@@ -1,0 +1,30 @@
+div.menu_head {
+	width:100px;
+	display: inline-block;
+	margin:5px 0 5px 15px;
+}
+div.menu_head A {
+    text-decoration: none; 
+   } 
+div.message_area {
+	width:100%; 
+	height:100%;
+}
+div.message {
+    border: 2px solid black; 
+    background: #ffffff; 
+    padding: 2px;
+}
+div.message:hover {
+	background:#F9F9F9;
+}	
+div.full_message {
+	border: 1px solid black; 
+	height:200px;
+	width:100%;
+}	
+textarea.answer_area {
+	border: 1px solid black; 
+	height:200px;
+	width:100%;
+}

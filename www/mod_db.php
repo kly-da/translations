@@ -4,5 +4,5 @@
     header('Location: /error/internal.php');
     die();
   }
-  mysql_select_db('translations', $conn);
+  mysql_select_db('translations');
 ?>
