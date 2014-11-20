@@ -37,6 +37,7 @@
   print "<br><br>\n";
 ?>
     <form action="login_as.php" method="get">
+      Зайти как:<br>
       <select name="id">
 <?
   $query = "SELECT `user_id`, CONCAT(`name`, ' (',
