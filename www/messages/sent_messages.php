@@ -14,9 +14,8 @@
 			$sqlQueryUserName = "SELECT  `name` FROM  `user` WHERE  `user_id` = '$id_user'";
 			$rsUserName =  mysql_query($sqlQueryUserName);
 			$name = mysql_fetch_row($rsUserName);
-			echo "<div class=\"message\">Отправлено: <font color=\"red\">".$name[0]."</font> в " . $row['date_sending'] . "<br />" . substr($row['text'],0,30) . "<br /></div>";
+			echo "<div class=\"message\">Отправлено: <font color=\"red\">".$name[0]."</font> в " . $row['date_sending'] . "<br />" . $row['text']. "<br /></div>";
 		}
 	}
 	else echo 'В данный момент у вас нету исходящих сообщений';
 ?>
-<body onLoad="scroll(0,100%)"></body>

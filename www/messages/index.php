@@ -76,6 +76,9 @@
 	<div class="menu_head">
 		<a href="#" onclick="showSentMessagesAndUnsetInterval()">Отправленные</a>
 	</div>
+	<div class="menu_head">
+		<a href="write_message.php">Написать письмо</a>
+	</div>
 	<div id="message_content" class="message_area" >
 	</div>
  
