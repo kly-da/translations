@@ -1,4 +1,4 @@
-$(document).ready(function(){ 
+$(document).ready(function(){
     $('.chapter_menu').mouseleave(function(){
       $(this).hide();
     });
@@ -25,5 +25,31 @@ $(document).ready(function(){
       });
 
       obj.show();
+    });
+
+    var complaint = $('#text_complaint');
+    var text_id = complaint.attr('text_id');
+    $('#text_complaint').click(function() {
+      $.ajax({
+        type: "POST",
+        url: "/module/make_complaint.php",
+        data: "type=text&id=" + text_id,
+        dataType: "json",
+        error: function(e) {
+          complaint.html('Ошибка отправки');
+        },
+        success: function(data) {
+          switch (data.status) {
+            case "ok":
+              complaint.html("Жалоба отправлена");
+              break
+            case "fail":
+              complaint.html('Ошибка отправки');
+              break
+            default:
+              complaint.html('');
+          }
+        }
+      });
     });
 });

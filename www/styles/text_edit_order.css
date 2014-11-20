@@ -1,0 +1,18 @@
+.buttons {
+  margin-left: 5px;
+  display: inline-block;
+  width: 60px;
+}
+
+input {
+  margin-bottom: 10px;
+  text-align: center;
+  height: 50px;
+	width: 50px;
+  vertical-align: top;
+}
+
+select {
+	width: 180px;
+  vertical-align: top;
+}
