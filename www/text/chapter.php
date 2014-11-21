@@ -21,16 +21,6 @@
 
 	mysql_query("SET NAMES utf8");
 
-	if ($_POST['text'])
-	{
-		$insert_query = 'INSERT INTO `translation` (fragment_id, length, user_id, text)
-						VALUES (\'' . $_POST['fragment_id'] . '\', 
-						\'' . $_POST['length'] . '\', 
-						\'' . $_POST['user_id'] . '\', 
-						\'' . $_POST['text'] . '\')';
-		mysql_query($insert_query);
-	}
-
 	$text_query = 'SELECT `text`.*, `user`.`name` AS `creator_name` FROM `text` JOIN `user` ON(`creator` = `user_id`) WHERE `text_id` = ' . $text_id;
 	$chapter_query = 'SELECT `chapter_name`, `chapter_number` FROM `chapter` WHERE `chapter_id` = ' . $chapter_id;
 	$fragment_query = 'SELECT `fragment_id`, `text` FROM `fragment` WHERE `chapter_id` = ' . $chapter_id;
@@ -82,7 +72,7 @@
 			var $num = $(this).attr('data-id');
 			var $mark = $(this).attr('mark');
 			
-			$.get("rate.php", {trans_id: $num, user_id: "1", mark: $mark}, function(ok) {
+			$.get("./db/rate.php", {trans_id: $num, user_id: "1", mark: $mark}, function(ok) {
 					if ($mark == "1")
 					{
 						var $likes = +($("#like_" + $num).text()) + 1;
@@ -99,6 +89,22 @@
 		});
 	});
 		
+	$(document).ready(function(){
+		$('#translate_table').on('click', '.ok_add', function(event) {
+			
+			var $num = $(this).attr('data-id');
+			var $text = $("#text_" + $num).val();
+			var $len = $("#len_" + $num).val();
+			var $uid = $("#uid_" + $num).val();
+			
+			$.post("./db/insert_translation.php", {fid: $num, uid: $uid, len: $len, text: $text}, function(ok) {
+					location.reload();
+				}
+			);
+			
+		});
+	});	
+		
 </script>
 	
 <?
@@ -111,15 +117,14 @@ function gen_add_row($rows_count, $frag_num, $frag_id)
 		print "<td colspan=3><div id=\"add_content_" . $frag_num . "\">Пока переводов нет.";
 	else
 		print "<td colspan=3><div id=\"add_content_" . $frag_num . "\">";
-	print "<input type=\"button\" class=\"add\" value=\"Add...\" data-id=\"" . $frag_num . "\"></div>
+	print "<input type=\"button\" class=\"add\" value=\"Добавить...\" data-id=\"" . $frag_num . "\"></div>
 		<div id=\"form_" . $frag_num . "\" style=\"display: none\">
-			<form method=\"post\" action=\"chapter.php?text_id=" . $text_id . "&chapter_id=" . $chapter_id . "\">
+			<form>
 				Перевод:<br>
-				<textarea style=\"width: 100%\" rows=\"10\" name=\"text\"></textarea><br>
-				<input type=\"hidden\" name=\"fragment_id\" value=\"" . $frag_id . "\">
-				<input type=\"hidden\" name=\"length\" value=\"1\">
-				<input type=\"hidden\" name=\"user_id\" value=\"1\">
-				<input type=\"submit\" value=\"Ок\">
+				<textarea style=\"width: 100%\" rows=\"10\" id=\"text_" . $frag_id . "\"></textarea><br>
+				<input type=\"hidden\" id=\"len_" . $frag_id . "\" value=\"1\">
+				<input type=\"hidden\" id=\"uid_" . $frag_id . "\" value=\"1\">
+				<input type=\"button\" class=\"ok_add\" value=\"Ок\" data-id=\"" . $frag_id . "\">
 				<input type=\"button\" class=\"cancel\" value=\"Отмена\" data-id=\"" . $frag_num . "\">
 			</form>
 		</div>
