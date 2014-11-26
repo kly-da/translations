@@ -22,7 +22,7 @@
 			var $num = $(this).attr('data-id');
 			var $mark = $(this).attr('mark');
 			
-			$.get("./db/rate.php", {trans_id: $num, user_id: "1", mark: $mark}, function(ok) {
+			$.post("./db/rate.php", {trans_id: $num, user_id: "1", mark: $mark}, function(ok) {
 					if ($mark == "1")
 					{
 						var $likes = +($("#like_" + $num).text()) + 1;
@@ -117,9 +117,9 @@
 								<div id="form_<?=$frag_num?>" style="display: none">
 									<form>
 										Перевод:<br>
-										<textarea style="width: 100%" rows="10" id="text_<?=$frag_id?>"></textarea><br>
-										<input type="hidden" id="len_<?=$fragment["fragment_id"]?>" value="1">
-										<input type="hidden" id="uid_<?=$fragment["fragment_id"]?>" value="1">
+										<textarea style="width: 100%" rows="10" id="text_<?=$frag_num?>"></textarea><br>
+										<input type="hidden" id="len_<?=$frag_num?>" value="1">
+										<input type="hidden" id="uid_<?=$frag_num?>" value="1">
 										<input type="button" class="ok_add" value="Ок" data-id="<?=$fragment["fragment_id"]?>">
 										<input type="button" class="cancel" value="Отмена" data-id="<?=$frag_num?>">
 									</form>
@@ -136,5 +136,4 @@
 	</div>
 	<div style="clear:right;"/></div>
   
-
 <? include('../footer.php');?>
