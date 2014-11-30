@@ -2,47 +2,50 @@
 	include('../mod_db.php');
 	include('../mod_auth.php');
 	
-	$id=$user -> uid;
+	//$id=$user -> uid;
 	
-	$idMessage=$_REQUEST['id'];
-	
-	if (!empty ($idMessage))
-	{
-		$sqlQuery = "SELECT * FROM message WHERE `id` = '$idMessage'";
-		
-		$rs = mysql_query($sqlQuery);
-		$row = mysql_fetch_array($rs);
-		$id_user_from = $row['id_user_from'];
-		$sqlQueryUserName = "SELECT  `name` FROM  `user` WHERE  `user_id` = '$id_user_from'";
-		$rsUserName =  mysql_query($sqlQueryUserName);
-		$name = mysql_fetch_row($rsUserName);
-		echo "<div class=\"full_message\">Сообщение от: <font color=\"red\">". $name[0]."</font> в " . $row['date_sending'] . "<br /> " . $row['text'] . "<br /></div>";
-	}
-	else {
     function additionalPageHeader() {
-?>
-  <link rel="stylesheet" type="text/css" href="/styles/message_index.css">
-<?  }
+	?>
+		<link rel="stylesheet" type="text/css" href="/styles/message_index.css">
+	<?  }
 
-    $title = "Текст письма";
-		include('../header.php');
-		echo "<form id=\"answer_form\" name=\"answer_form\" method=\"post\" action=\"write_into_base.php\"> Получатель <input type=\"text\" name=\"recipient\" id=\"recipient\" class=\"recipient\"/>";
-	}	
+    $title = "Написать письмо";
+	include('../header.php');	
 ?>
-<? if (!empty ($idMessage))
-	echo "<form id=\"answer_form\" name=\"answer_form\" method=\"post\" action=\"write_into_base.php\">"
-?>
-<div>Текст письма </div>
-<textarea name="answer_area" id="answer_area" class="answer_area"> </textarea> 
-</br></br>
-&nbsp;<input type="submit" name="submit" id="submit" value="Отправить" />
-<input type="hidden" name="id_user_to" value="<? if (!empty ($idMessage)) print $id_user_from; ?>"/>
-</form>
 
-<? 
-	$idMessage=$_REQUEST['id'];
-	if (empty ($idMessage))
-	{
-		include('../footer.php');
-	}
-?>
+
+
+<div class="content">
+	<div class="menu_header">
+		<table class="menu_header">
+			<tr class="menu_header">
+				<td class="menu_header">			<div class="menu_item" onclick="location.href='./inbox/';">Входящие</div> 					</td>
+				<td class="menu_header">			<div class="menu_item" onclick="location.href='./sent/';">Отправленные</a>					</td>
+				<td class="menu_header">			&nbsp;																						</td>
+				<td class="menu_header_current">			<div class="menu_item">Написать письмо<div>													</td>
+			</tr>
+		</table>
+	</div>
+	<div id="message_content" class="message_area" >
+		<form id='answer_form' name='answer_form' method='post' action='send_message.php'>
+				</br>
+				<span class="text">Имя получателя <input type='text' name='recipient' id='recipient' class='recipient'/></span>
+				</br></br>
+				<div><span class="text">Текст письма</span></div>
+				<textarea name="answer_area" id="answer_area" class="answer_area" placeholder="Введите ваше сообщение"></textarea> 
+				</br></br>
+				<div class="submit_button"> <input class="submit_button" type="submit" name="submit" id="submit" value="Отправить" />	</div>
+		</form>
+	</div>
+ 
+  </div>
+  <div class="user">
+    <div class="middle_text">Пользователь</div>
+  </div>
+  <div style="clear:right;"/></div>
+  <div class="news">
+    <div class="middle_text">Новости</div>
+  </div>
+  
+ 	
+<? include('../footer.php');?>

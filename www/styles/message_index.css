@@ -3,28 +3,167 @@ div.menu_head {
 	display: inline-block;
 	margin:5px 0 5px 15px;
 }
+div.menu_header {
+	width:100%; 
+	border:1px solid black;
+	margin:0;
+	padding:0;
+}
+div.menu_footer {
+	position:absolute;
+	bottom:0px;
+	width:100%; 
+	border:1px solid black;
+	margin:0;
+	padding:0;
+}
+table.menu_header {
+	width:100%; 
+	border-spacing:0;
+}
+tr.menu_header {
+	width:100%; 
+	height:100%; 
+	margin:0px;
+	padding:0px;
+}
+td.menu_header {
+	text-align:center;
+	width:25%; 
+}
+td.menu_footer {
+	text-align:center;
+	width:20%; 
+}
+td.menu_footer_chbox {
+	vertical-align:middle;
+	width:20%; 
+}
+label.chbox_label{
+	margin-bottom:2px;
+}
+td.menu_header_current {
+	text-align:center;
+	font-size:large;
+	width:25%; 
+	background:#3366CC;
+}
+div.menu_item {
+   cursor:pointer;  
+} 
 div.menu_head A {
     text-decoration: none; 
-   } 
+} 
 div.message_area {
 	width:100%; 
+	height:500px;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+div.message_item {
+	width:100%; 
+	height:48px;
+    border: 1px solid black; 
+	border-collapse:0px;
+}
+div.chbox {
+	display:inline-block;
 	height:100%;
+	width:2%;
+	vertical-align:top;
+}
+div.mainchbox {
+	display:inline;
+	margin:0;
+	padding:0;
+}
+
+input.chbox {
+	position: relative;
+	top: 17px;
+	vertical-align:middle;
 }
 div.message {
-    border: 2px solid black; 
+	display: inline-block;
+	width:97%;
     background: #ffffff; 
     padding: 2px;
+	height:92%;
 }
 div.message:hover {
-	background:#F9F9F9;
+	background:#BABABA;
 }	
+div.message_name {
+   display: inline-block;
+   width:70%;
+   height:20px;
+   cursor: default;
+}
+div.message_date {
+   float:right;
+   display: inline-block;
+   width:20%;
+   height:20px;
+   cursor: default;
+}
+div.message_text {
+   width:100%;
+   height:25px;
+   cursor: default;
+}
+div.message_unreaded  {
+	display: inline-block;
+	width:97%;
+    background: #ffffff; 
+    padding: 2px;
+	height:92%;
+	font-weight: bold;
+}
+div.message_unreaded:hover {
+	background:#BABABA;
+}
 div.full_message {
 	border: 1px solid black; 
 	height:200px;
 	width:100%;
+	font-size:11pt;
 }	
-textarea.answer_area {
+
+div.full_message_unreaded {
 	border: 1px solid black; 
 	height:200px;
 	width:100%;
+	font-size:13pt;
+}	
+div.header_message {
+	border: 1px solid black; 
+	width:100%;
+}
+div.footer_message {
+	border: 1px solid black; 
+	width:100%;
+}
+div.submit_button {
+	float:right;
+	width:150px;
+	padding-right:5px;
+}
+input.submit_button {
+	width:150px;
+	height:30px;
+}
+span.text{
+	margin: 5px 0 5px 5px;
+}
+textarea.answer_area {
+	padding-left:5px;
+	border: 1px solid black; 
+	height:200px;
+	width:100%;
+	resize: none;
+	font-family:'Times New Roman';
+	font-size:11pt;
+	outline: none;
+	-moz-appearance: none;
+	border: 1px solid #999;
 }

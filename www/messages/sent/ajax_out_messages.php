@@ -1,6 +1,6 @@
 <?PHP
-	include('../mod_db.php');
-	include('../mod_auth.php');
+	include('../../mod_db.php');
+	include('../../mod_auth.php');
 	
 	$id=$user -> uid;
 

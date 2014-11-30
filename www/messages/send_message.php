@@ -30,7 +30,7 @@
   <link rel="stylesheet" type="text/css" href="/styles/message_index.css">
 <?}
 
-  $title = "Входящие";
+	$title = "Сообщение отправлено";
 	include('../header.php');
 	
 ?>
@@ -38,8 +38,7 @@
     <div class="menu_head">
       <a href="index.php">Входящие</a>
     </div>
-    <div id="message_content" class="message_area" > Письмо успешно отправлено!
-	</div>
+    <div id="message_content" class="message_area" > Письмо успешно отправлено! Получатели </div> <!--допилить -->
  
   </div>
   <div class="user">
