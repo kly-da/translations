@@ -190,6 +190,34 @@
     return $title;
   }
 
+  function generateChapterList() {
+    global $chapters, $chapters_count, $text_row;
+    $chapters = array();
+
+    $query = 'SELECT
+      `chapter_id`,
+      `chapter_name`,
+      `fragments_count`,
+      `translated_fragments_count`,
+      round(`translated_fragments_count` / `fragments_count` * 100, 0) AS `translated_percent`,
+      `last_activity`
+    FROM
+      `chapter`
+    WHERE
+      `text_id` = ' . $text_row["text_id"] . '
+    ORDER BY
+      `chapter_number`';
+    $result = mysql_query($query);
+
+    $chapters_count = 0;
+    while ($row = mysql_fetch_assoc($result)) {
+      array_push($chapters, $row);
+      $chapters_count += 1;
+    }
+
+    mysql_free_result($result);
+  }
+
   //=================================== Основной код
 
   $formatter = new Formatter();
@@ -212,6 +240,8 @@
     $publish_menu_item = generatePublishMenuItem();
     $delete_menu_item = generateDeleteMenuItem();
   }
+
+  generateChapterList();
 
   function additionalPageHeader() {
 ?>
@@ -279,7 +309,7 @@
         </tr>
         <tr>
           <td class="info_parameter">Создатель</td>
-          <td class="info_value"><a href="/user/view.php?id=<? print $text_row["creator"]?>"><? print $text_row["creator_name"]?></a> <span class="light_gray">(создано – <? print $formatter -> toStringChangedDate($text_row["date_created"]); ?>)</span></td>
+          <td class="info_value"><a href="/user/view.php?id=<? print $text_row["creator"]?>"><? print $text_row["creator_name"]?></a> <span class="light_gray">(создано – <? print $formatter -> toStringChangedDateWithYear($text_row["date_created"]); ?>)</span></td>
         </tr>
 <?
   if (!$user -> isTextNoRole()) {
@@ -292,7 +322,9 @@
   }
 ?>
       </table>
-      <a id="text_complaint" class="complaint" href="111">Пожаловаться на перевод</a>
+<?  if ($user -> isRegistered()) { ?>
+      <a id="text_complaint" text_id="<? print $text_id;?>" class="complaint" href="#">Пожаловаться на перевод</a>
+<?  }?>
       <ul class="text_menu">
 <?
   if ($user -> isManageUser() || $user -> isTextAdministratorOrCreator()) {
@@ -301,6 +333,7 @@
           <ul>
 <?  if (!$text_row["is_deleted"]) { ?>
             <a href="add_chapter.php?id=<? print $text_id;?>"><li>Добавить главу</li></a>
+            <a href="edit_order.php?id=<? print $text_id;?>"><li>Порядок глав</li></a>
             <a href="edit.php?id=<? print $text_id;?>"><li>Редактировать настройки</li></a>
             <a href="<? print $publish_menu_item["href"];?>"><li><? print $publish_menu_item["text"];?></li></a>
 <?  }?>
@@ -330,6 +363,20 @@
           <th>&nbsp;</th>
           <th>&nbsp;</th>
         </tr>
+<?
+  foreach ($chapters as $chapter) {
+?>
+        <tr>
+          <td class="title"><a href="chapter.php?<? print "text_id=" . $text_id . "&chapter_id=" . $chapter["chapter_id"];?>"><?print $chapter["chapter_name"];?></a></td>
+          <td class="left"><?print $chapter["translated_fragments_count"] . "/" . $chapter["fragments_count"];?> <span class="light_gray">(<? print $chapter["translated_percent"];?>%)</span></td>
+          <td><? print $formatter -> toStringChangedDate($chapter["last_activity"]);?></td>
+          <td>завершено</td>
+          <td><a href="<? print "download.php?cid=" . $chapter["chapter_id"];?>">скачать</a></td>
+          <td><a class="show_menu" cid="<? print $chapter["chapter_id"];?>">меню</a></td>
+        </tr>
+<?
+  }
+?>
         <tr>
           <td class="title"><a href="343">Вступление</a></td>
           <td class="left">350/350 <span class="light_gray">(100%)</span></td>

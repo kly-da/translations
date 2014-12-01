@@ -176,7 +176,7 @@ $(document).ready(function(){
   $.validator.addMethod("time", function(value, element) {
     return this.optional(element) || /^([0-9]{1,3}:)?[0-5]?[0-9]:[0-5][0-9]$/i.test(value);
   }, "Please enter a valid time.");
-  $("#login_form").validate({
+  $("#edit_form").validate({
     errorClass: "form_error",
     errorElement: "span",
     highlight: "",

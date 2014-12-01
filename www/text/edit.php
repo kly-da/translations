@@ -69,7 +69,7 @@ TEXT;
       else
         $text .= "                <option value=\"$index\">" . $value . "</option>\n";
     }
-    $text .= "              </select>\n";
+    $text .= "            </select>\n";
     return $text;
   }
 
@@ -184,7 +184,7 @@ TEXT;
 
   <div class="content" style="border: 0px;">
     <h1>Редактирование настроек<? if ($_GET["status"] == "ok") print " (сохранено)";?></h1>
-    <form id="login_form" action="edit_save.php" method="post">
+    <form id="edit_form" action="edit_save.php" method="post">
       <input type="hidden" name="operation" value="save" />
       <input type="hidden" name="id" value="<? print $text_id; ?>" />
       <fieldset>
@@ -279,7 +279,7 @@ TEXT;
         <legend>Настройка доступа</legend>
         <label>
           <div class="form_input">
-            <span class="param_title">Открытость</span>
+            <span class="param_title">Открытость:</span>
             <? print generateAccessSelect(); ?> <input type="submit" style="margin-left: 50px;" value="Сохранить" />
           </div>
         </label>

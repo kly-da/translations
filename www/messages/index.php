@@ -1,43 +1,100 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=windows-1251" />
-<title>�������� ���������</title>
-<style type="text/css">
-<!--
-p {
-	text-align: center;
-}
-a:link {
-	color: #F00;
-}
-a:visited {
-	color: #F00;
-}
-a:hover {
-	color: #00F;
-}
-a:active {
-	color: #900;
-}
--->
-</style>
-</head>
+<?
+  include('../mod_db.php');
+  include('../mod_auth.php');
+  
+  // $conn - соединение с базой данных
+  // $user - информация о текущем пользователе
+  
+  //Код компонента - здесь
 
-<body>
-<table width="98%" border="0" cellspacing="0" cellpadding="0">
-  <tr>
-    <td><h1><font color="#990000">���� � ����������</font></h1></td>
-  </tr>
-  <tr>
-    <td height="239"><form id="form1" name="form1" method="post" action="enter.php?action=enter">
-      ������� ��� �������:
-      <label>
-        <input type="text" name="nick" id="nick" />
-      </label>
-      <input type="submit" name="button" id="button" value="�����" />
-    </form></td>
-  </tr>
-</table>
-</body>
-</html>
+  function additionalPageHeader() {
+?>
+  <link rel="stylesheet" type="text/css" href="/styles/message_index.css">
+<?}
+
+  $title = "Сообщения";
+  include('../header.php');
+ 
+?>
+<script>  
+	var intervalID;
+	
+	function showIncomingMessages()  
+	{  	
+		$.ajax({  
+			url: "incoming_messages.php",  
+			cache: false,  
+			success: function(html){  
+				$("#message_content").html(html);  
+			}  
+		});
+
+		
+	}  
+	
+	function showSentMessages()  
+	{  
+		$.ajax({  
+			url: "sent_messages.php",  
+			cache: false,  
+			success: function(html){  
+				$("#message_content").html(html);  
+			}  
+		});  
+	} 
+	
+	function OpenMessage(e)  
+	{  
+		e = e || window.event;
+		var el = e.target || e.srcElement;
+		//alert(el.id);	
+		$.ajax({  
+			type: "POST",
+			url: "write_message.php", 
+			data: "id="+el.id,			
+			cache: false,  
+			success: function(html){  
+				$("#message_content").html(html);  
+			}  
+		});  
+		clearInterval(intervalID);
+	} 
+	
+	function showIncMessagesAndSetInterval() {
+		showIncomingMessages();
+		intervalID = setInterval('showIncomingMessages()',5000); 	
+	}
+	function showSentMessagesAndUnsetInterval() {
+		clearInterval(intervalID);
+		showSentMessages();
+	}
+  
+	$(document).ready(function(){  				
+		showIncMessagesAndSetInterval();
+	});  
+</script>
+
+  <div class="content">
+	<div class="menu_head">
+		<a href="#" onclick="showIncMessagesAndSetInterval()">Входящие</a>
+	</div>
+	<div class="menu_head">
+		<a href="#" onclick="showSentMessagesAndUnsetInterval()">Отправленные</a>
+	</div>
+	<div class="menu_head">
+		<a href="write_message.php">Написать письмо</a>
+	</div>
+	<div id="message_content" class="message_area" >
+	</div>
+ 
+  </div>
+  <div class="user">
+    <div class="middle_text">Пользователь</div>
+  </div>
+  <div style="clear:right;"/></div>
+  <div class="news">
+    <div class="middle_text">Новости</div>
+  </div>
+  
+ 	
+<? include('../footer.php');?>

@@ -1,32 +1,10 @@
 <?
-  //=================================== Обработка параметров
-  $text_id = intval($_POST["id"]);
-  if ($text_id <= 0) {
-    header('Location: /');
-    die();
-  }
-
   //=================================== Авторизация
 
   include('../mod_db.php');
   include('../mod_auth.php');
 
-  $query = 'SELECT `text`.*, `user`.`name` AS `creator_name` FROM `text` JOIN `user` ON(`creator` = `user_id`) WHERE `text_id` = ' . $text_id;
-  $result = mysql_query($query);
-  $text_row = mysql_fetch_assoc($result);
-  if (!$text_row) {
-    header('Location: /error/text_not_found.php');
-    die();
-  }
-
-  $user -> loadTextOut($text_row);
-
-  if ($text_row["is_deleted"]) {
-    header('Location: /error/text_not_found.php');
-    die();
-  }
-
-  if (!($user -> isTextAdministratorOrCreator() || $user -> isManageUser())) {
+  if (!$user -> isRegistered()) {
     header('Location: /error/no_access.php');
     die();
   }
@@ -72,15 +50,49 @@
     }
   }
 
-  function saveText() {
-    global $error, $text_row, $text_id;
+  function checkLimit() {
+    global $user;
+    if ($user -> isAdministrator())
+      return true;
+
+    if ($user -> isModerator())
+      $limit_count = 10;
+    else
+      $limit_count = 3;
+
+    $uid = $user -> uid;
+
+    $query = 'SELECT COUNT(*) < $limit_count AS is_exceeded
+      FROM `text`
+      WHERE `creator` = $uid AND CAST(`date_created` AS date) >= CURDATE() - INTERVAL 2 DAY';
+    $result = mysql_query($query);
+    $row = mysql_fetch_assoc($result);
+    if (!row) {
+      array_push($error, "Ошибка базы данных. Попробуйте создать перевод позднее.");
+      return false;
+    }
+
+    $ret = $row["is_exceeded"];
+    mysql_free_result($result);
+
+    if ($ret)
+      return true;
+    else {
+      array_push($error, "Превышен лимит создания переводов за последние три дня.");
+      return false;
+    }
+  }
+
+  function createText() {
+    global $error, $user;
     $title = checkString($_POST["title"], true, 4, 80, "название перевода");
     $original_title = checkString($_POST["original_title"], true, 4, 80, "оригинальное название перевода");
     $language = intval($_POST["language"]);
     $original_language = intval($_POST["original_language"]);
+    $text_type_code = intval($_POST["type"]);
+    $access = intval($_POST["access"]);
     $description = mysql_real_escape_string(htmlspecialchars($_POST["description"]));
-
-    $text_type_code = $text_row["type"];
+    $uid = $user -> uid;
 
     if ($text_type_code == 0) {
       $isbn = checkString($_POST["isbn"], true, 0, 20, "ISBN");
@@ -91,85 +103,80 @@
       $duration = setDuration($_POST["duration"]);
     }
 
+    if ($text_type_code < 0 || $text_type_code > 2 || $access < 1 || $access > 4) {
+      $error = array("Ошибка отправки формы");
+    }
+
     if (count($error) > 0)
       return;
 
-    $query = "UPDATE `text`
-    SET
-      `title` = \"$title\",
-      `original_title` = \"$original_title\",
-      `language` = $language,
-      `original_language` = $original_language,
-      `description` = \"$description\"
-    WHERE
-      `text_id` = $text_id";
+    $query = "INSERT INTO `text`
+      (`type`,
+      `access`,
+      `creator`,
+      `title`,
+      `original_title`,
+      `language`,
+      `original_language`,
+      `description`)
+    VALUES
+      ($text_type_code,
+      $access,
+      $uid,
+      \"$title\",
+      \"$original_title\",
+      $language,
+      $original_language,
+      \"$description\")";
     executeQuery($query);
     if (count($error) > 0)
       return;
 
+    $text_id = mysql_insert_id();
+
     if ($text_type_code == 0) {
-      $query = "UPDATE `book`
-      SET
-        `isbn` = \"$isbn\",
-        `author` = \"$author\",
-        `native_author` = \"$native_author\",
-        `release_date` = $release_date
-      WHERE
-        `text_id` = $text_id";
+      $query = "INSERT INTO `book`
+        (`text_id`,
+        `isbn`,
+        `author`,
+        `native_author`,
+        `release_date`)
+      VALUES
+        ($text_id,
+        \"$isbn\",
+        \"$author\",
+        \"$native_author\",
+        $release_date)";
       executeQuery($query);
     } else if ($text_type_code == 1) {
-      $query = "UPDATE `subtitles` SET `duration` = $duration WHERE `text_id` = $text_id";
+      $query = "INSERT INTO `subtitles`
+        (`text_id`,
+        `duration`)
+      VALUES
+        ($text_id,
+        $duration)";
       executeQuery($query);
     }
     if (count($error) == 0) {
-      header('Location: edit.php?id=' . $text_id . '&status=ok');
+      header('Location: view.php?id=' . $text_id);
       die();
     }
-  }
-
-  function saveAccess() {
-    global $error, $text_row, $text_id;
-    $access_code = intval($_POST["access"]);
-    if ($access_code <= 0 || $access_code > 4) {
-      array_push($error, "Ошибка сохранения");
-      return;
-    }
-    $query = "UPDATE `text`
-    SET
-      `access` = $access_code
-    WHERE
-      `text_id` = $text_id";
-    executeQuery($query);
-    if (count($error) > 0)
-      return;
-    header('Location: edit.php?id=' . $text_id . '&status=ok');
-    die();
   }
 
   //=================================== Основной код
 
   $error = array();
-
-  switch ($_POST["operation"]) {
-    case "save":
-      saveText();
-      break;
-    case "save_access":
-      saveAccess();
-      break;
-    default:
-      header('Location: /');
-      die();
-      break;
+  if (checkLimit()) {
+    createText();
   }
 
-  $title = 'Ошибка сохранения';
+  $title = 'Ошибка создания';
   include('../header.php');
 ?>
 
   <div class="content" style="border: 0px;">
     <div>
-      <h1>Ошибка сохранения</h1>
+      <h1>Ошибка создания</h1>
       <div style="line-height: 1.5">
 <?
   foreach ($error as $value) {
@@ -177,7 +184,7 @@
   }
 ?>
         <br>
-        <a href="edit.php?id=<? print $text_id; ?>">Вернуться назад...</a>
+        <a href="javascript:history.back()">Вернуться назад...</a>
       </div>
     </div>
   </div>
