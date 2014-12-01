@@ -18,6 +18,7 @@
 	}
 	else
 	{
+		echo 0;
 		die();
 	}
 	echo $ok;

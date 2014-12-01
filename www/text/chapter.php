@@ -38,6 +38,7 @@
 	}
 
 	$user -> loadTextOut($text_row);
+	$user_id = 1;
 
 	if ($text_row["is_deleted"])
 	{
@@ -52,21 +53,28 @@
 	$translations = array();
 	$trans_like = array();
 	$trans_dislike = array();
+	$translated = array();
 	
 	$frag_num = 1;
 	while ($fragment_row = mysql_fetch_assoc($fragment_result))
 	{		
 		$fragments[$frag_num] = $fragment_row;
-		$trans_query = 'SELECT `translation_id`, `fragment_id`, `text` FROM `translation` WHERE 
+		$trans_query = 'SELECT `translation_id`, `fragment_id`, `user_id`, `text` FROM `translation` WHERE 
 			`fragment_id` = ' . $fragment_row["fragment_id"];
 		$trans_result = mysql_query($trans_query);
 		$trans_count[$frag_num] = mysql_num_rows($trans_result);
 		$translations[$frag_num] = array();
+		$translated[$frag_num] = false;
+		
 		$trans_num = 1;
 		while ($trans_row = mysql_fetch_assoc($trans_result))
 		{
 			$translations[$frag_num][$trans_num] = $trans_row;
 			$trans_id = $trans_row["translation_id"];
+			if ($trans_row["user_id"] == $user_id)
+			{
+				$translated[$frag_num] = true;
+			}
 			$trans_like[$trans_id] = mysql_num_rows(mysql_query('SELECT `rating_id`, `translation_id`, `mark` FROM `rating` WHERE
 				`translation_id` = ' . $trans_id . ' AND `mark` = 1'));
 			$trans_dislike[$trans_id] = mysql_num_rows(mysql_query('SELECT `rating_id`, `translation_id`, `mark` FROM `rating` WHERE
