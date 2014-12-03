@@ -56,7 +56,7 @@ div.menu_head A {
 } 
 div.message_area {
 	width:100%; 
-	height:500px;
+	height:600px;
 	overflow-y: auto;
 	overflow-x: hidden;
 }
@@ -126,7 +126,8 @@ div.full_message {
 	border: 1px solid black; 
 	height:200px;
 	width:100%;
-	font-size:11pt;
+	font-size:12pt;
+	background:#CECECE;
 }	
 
 div.full_message_unreaded {
@@ -138,6 +139,8 @@ div.full_message_unreaded {
 div.header_message {
 	border: 1px solid black; 
 	width:100%;
+	height:40px;
+	padding: 5px;
 }
 div.footer_message {
 	border: 1px solid black; 
@@ -147,6 +150,7 @@ div.submit_button {
 	float:right;
 	width:150px;
 	padding-right:5px;
+	padding-top:5px;
 }
 input.submit_button {
 	width:150px;

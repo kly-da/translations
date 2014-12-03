@@ -12,24 +12,13 @@
   <link rel="stylesheet" type="text/css" href="/styles/message_index.css">
 <?}
 
-  $title = "Сообщения";
+  $title = "Входящие сообщения";
   include('../../header.php');
  
 ?>
 <script>  
 	var intervalID;
-	
-	function showInMessages()  
-	{  	
-		$.ajax({  
-			url: "ajax_in_messages.php",  
-			cache: false,  
-			success: function(html){  
-				$("#message_content").html(html);  
-			}  
-		});		
-	}  
-	
+
 	function SetMessagesCount(){
 		$.ajax({  
 			url: "messages_count2.php",  
@@ -39,6 +28,18 @@
 			}  
 		});	
 	}
+	
+	function showInMessages()  
+	{  		
+		SetMessagesCount();		
+		$.ajax({  
+			url: "ajax_in_messages.php",  
+			cache: false,  
+			success: function(html){  
+				$("#message_content").html(html);  
+			}  
+		});	
+	}  
 	
 	function OpenMessage(e)  
 	{  
@@ -71,11 +72,11 @@
 			$.ajax({  
 			type: "POST",
 			url: "../delete_message.php", 
-			data: {mas:mas},			
+			data: {mas:mas,inbox:true},			
 			cache: false,  
-			success: function(html){  
-				$("#test").html(html);  
-			}  
+			//success: function(html){  
+			//	$("#test").html(html);  
+			//}  
 		}); 
 		};
 	}
@@ -87,10 +88,9 @@
 	}
 	
 	$(document).ready(function(){  	
-	
 		showInMessages();
 		intervalID = setInterval('showInMessages()',100000);
-		SetMessagesCount();	
+		//SetMessagesCount();	
 
 		$("#maincbox").click( function() { // при клике по главному чекбоксу
             if($('#maincbox').attr('checked')){ // проверяем его значение
@@ -106,7 +106,7 @@
 	<div class="menu_header">
 		<table class="menu_header">
 			<tr class="menu_header">
-				<td class="menu_header_current"><div id= "inbox_label" class="menu_item" onclick="location.href='../inbox/';">Входящие</div> </td>
+				<td class="menu_header_current"><div id="inbox_label" class="menu_item" onclick="location.href='../inbox/';">Входящие</div> </td>
 				<td class="menu_header"><div class="menu_item" onclick="location.href='../sent/';">Отправленные</a></td>
 				<td class="menu_header">&nbsp;</td>
 				<td class="menu_header"><div class="menu_item" onclick="location.href='../write_message.php';">Написать письмо<div></td>
@@ -115,8 +115,8 @@
 	</div>
 	<div id="message_content" class="message_area" >
 	</div>
-	<div id="test">
-	</div>
+	<!--<div id="test"> 
+	</div> -->
 	<div class="menu_footer">
 		<table class="menu_header">
 			<tr class="menu_header">

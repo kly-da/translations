@@ -4,7 +4,7 @@
 	
 	$id=$user -> uid;
 
-	$sqlQuery = "SELECT * FROM message WHERE `id_user_to` = '$id' AND `is_recipient_delete` = '0'";
+	$sqlQuery = "SELECT * FROM message WHERE `id_user_to` = '$id' AND `is_recipient_delete` = '0' ORDER BY `date_sending` DESC";
 	$rs = mysql_query($sqlQuery);
 	
 	if (mysql_num_rows($rs) > 0)
