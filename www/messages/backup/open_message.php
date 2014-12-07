@@ -4,7 +4,7 @@
 	
 	$id=$user -> uid;
 	
-	$idMessage=$_REQUEST['id'];
+	$idMessage=$_POST['id'];
 	
 	if (!empty ($idMessage))
 	{
@@ -20,7 +20,22 @@
 		
 		$name = mysql_fetch_row($rsUserName);
 		
-		echo "<div class='header_message'> <span class='text'>Сообщение от: <font color='red'>". $name[0]."</font></span> </br><span class='text'>" . $row['date_sending'] . "</span></div><div class='full_message'><span class='text'>" . $row['text'] . "</span></div>";
+		$date = date("d.m.y", strtotime($row['date_sending']));
+			
+		if ($date == date("d.m.y")) 
+		{
+			$date = "Сегодня,";
+		}
+		
+		//echo "<div class='header_message'> <span class='text'>От кого: ". $name[0]."</span> </br><span class='text'>" . //$row['date_sending'] . "</span></div><div class='full_message'><span class='text'>" . $row['text'] . "</span></div>";
+		
+		echo " 			
+			<div class='header_message'>
+				От кого: " . $name[0]. " </br> 
+			    " . $date . " в " . date("H:i:s", strtotime($row['date_sending'])) . "
+			</div>	
+			<div class='full_message'><span class='text'>" . $row['text'] . "</span></div>
+		";
 		
 		if ($row['is_readed'] == 0) {
 			$sqlQueryUpdate = "UPDATE `message` SET `is_readed`= '1' WHERE `id` = '" . $row['id'] ."'" ;		
@@ -28,14 +43,10 @@
 		}
 	}	
 ?>
-
-<div><span class="text">Текст ответа</span></div>
-<form id='answer_form' name='answer_form' method='post' action='send_message.php'>
-	<textarea name="answer_area" id="answer_area" class="answer_area" placeholder="Введите ваше сообщение"></textarea> 
-	</br></br>
+<form id='answer_form' name='answer_form' method='post' action='../write_message.php'>
 	<div class="submit_button">
-		<input type="submit" name="submit" id="submit" value="Отправить" class="submit_button" />
+		<input type="submit" name="submit" id="submit" value="Ответить" class="submit_button" />
 	</div>
-
 	<input type="hidden" name="id_user_to" value="<? if (!empty ($idMessage)) print $id_user_from; ?>"/> 
+
 </form>
