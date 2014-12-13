@@ -8,12 +8,11 @@
 	
 	$delete_from=$_POST["from"];
 	
-	if ($delete_from == "dialogs")
+	if ($delete_from == "dialogs_list")
 	{
 		foreach  ($arr_id as $id_user)
 		{
 			$delete_query = "UPDATE `message` SET `is_recipient_delete`='1' WHERE `id_user_to` IN ('$id','$id_user') AND `id_user_from` IN ('$id','$id_user')";
-			echo($delete_query);
 			$delete_result=mysql_query($delete_query);
 		}
 	}

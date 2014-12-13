@@ -1,8 +1,3 @@
-div.menu_head {
-	width:200px;
-	display: inline-block;
-	margin:5px 0 5px 15px;
-}
 div.menu_header {
 	width:100%; 
 	border:1px solid black;
@@ -10,8 +5,6 @@ div.menu_header {
 	padding:0;
 }
 div.menu_footer {
-	position:absolute;
-	bottom:0px;
 	width:100%; 
 	border:1px solid black;
 	margin:0;
@@ -20,6 +13,7 @@ div.menu_footer {
 table.menu_header {
 	width:100%; 
 	border-spacing:0;
+	height:23px; 
 }
 tr.menu_header {
 	width:100%; 
@@ -29,7 +23,9 @@ tr.menu_header {
 }
 td.menu_header {
 	text-align:center;
+	vertical-align:middle;
 	width:25%; 
+	padding:0;
 }
 td.menu_footer {
 	text-align:center;
@@ -38,6 +34,7 @@ td.menu_footer {
 td.menu_footer_chbox {
 	vertical-align:middle;
 	width:20%; 
+	padding:0;
 }
 label.chbox_label{
 	margin-bottom:2px;
@@ -54,13 +51,14 @@ div.menu_item {
 div.menu_head A {
     text-decoration: none; 
 } 
-div.message_area {
+div.messages_content {
 	width:100%; 
-	height:600px;
+	min-height:632px;
+	max-height:632px;
 	overflow-y: auto;
 	overflow-x: hidden;
 }
-div.message_item {
+div.messages_item {
 	width:100%; 
 	height:48px;
     border: 1px solid black; 
@@ -83,19 +81,23 @@ input.chbox {
 	top: 17px;
 	vertical-align:middle;
 }
-div.message {
+div.messages_data {
 	display: inline-block;
 	width:97%;
     background: #ffffff; 
     padding: 2px;
 	height:92%;
 }
-div.message:hover {
+div.message {
+	width:100%;
+	height:100%;
+}
+div.messages_data:hover {
 	background:#BABABA;
 }	
 div.message_name {
    display: inline-block;
-   width:70%;
+   width:78%;
    height:20px;
    cursor: default;
 }
@@ -112,62 +114,10 @@ div.message_text {
    cursor: default;
 }
 div.message_unreaded  {
-	display: inline-block;
-	width:97%;
-    background: #ffffff; 
-    padding: 2px;
-	height:92%;
+	width:100%;
+	height:100%;
 	font-weight: bold;
-}
-div.message_unreaded:hover {
-	background:#BABABA;
-}
-div.full_message {
-	border: 1px solid black; 
-	height:200px;
-	width:100%;
-	font-size:12pt;
-	background:#CECECE;
-}	
-
-div.full_message_unreaded {
-	border: 1px solid black; 
-	height:200px;
-	width:100%;
-	font-size:13pt;
-}	
-div.header_message {
-	border: 1px solid black; 
-	width:100%;
-	height:40px;
-	padding: 5px;
-}
-div.footer_message {
-	border: 1px solid black; 
-	width:100%;
-}
-div.submit_button {
-	float:right;
-	width:150px;
-	padding-right:5px;
-	padding-top:5px;
-}
-input.submit_button {
-	width:150px;
-	height:30px;
 }
 span.text{
 	margin: 5px 0 5px 5px;
-}
-textarea.answer_area {
-	padding-left:5px;
-	border: 1px solid black; 
-	height:200px;
-	width:100%;
-	resize: none;
-	font-family:'Times New Roman';
-	font-size:11pt;
-	outline: none;
-	-moz-appearance: none;
-	border: 1px solid #999;
 }

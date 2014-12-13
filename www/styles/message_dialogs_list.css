@@ -38,6 +38,7 @@ td.menu_footer {
 td.menu_footer_chbox {
 	vertical-align:middle;
 	width:20%; 
+	padding:0;
 }
 label.chbox_label{
 	margin-bottom:2px;

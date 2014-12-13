@@ -23,8 +23,6 @@
 		
 		$date = $formatter -> toStringChangedDateWithYear($dialogs_row['date_sending']);
 		
-		
-
 		echo " <div class='dialogs_item' id=item_".$dialogs_row['id_user_from']." >
 					<div class='chbox'> <input type='checkbox' class='chbox' name='cb[]' input-id=".$dialogs_row['id_user_from']."  /> </div>";	
 		echo " 	<div class='dialogs_data' data-id=".$dialogs_row['id_user_from'].">";	

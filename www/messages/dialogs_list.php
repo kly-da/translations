@@ -36,8 +36,8 @@
 		else {
 			$.ajax({  
 			type: "POST",
-			url: "delete_dialog.php", 
-			data: {mas:mas,from:"dialogs"},			
+			url: "deleting.php", 
+			data: {mas:mas,from:"dialogs_list"},			
 			cache: false,  
 			success: function(html){  
 				$("#test").html(html);  
@@ -48,7 +48,7 @@
 	
 	$(document).ready(function(){
 		loadDialogs();
-		intervalID = setInterval('loadDialogs()',15000);
+		intervalID = setInterval('loadDialogs()',5000);
 	});
 	
 	$(document).ready(function(){
@@ -89,10 +89,10 @@
 			<table class="menu_header">
 				<tr class="menu_header">
 					<td class="menu_footer_chbox"><div class='mainchbox'><input type='checkbox' name='cb[]' id='maincbox'/></div><label for="maincbox" class='chbox_label'>Выделить все</label></td>
-					<td class="menu_footer">&nbsp;</td>
-					<td class="menu_footer">&nbsp;</td>
 					<td class="menu_footer"><div class="menu_item" id="delete_button">Удалить</div></td>
 					<td class="menu_footer"><div class="menu_item" onclick='MarkMessagesAsSpam()'>Спам</div></td>
+					<td class="menu_footer"><div class="menu_item" onclick="location.href='./inbox.php';">В режим сообщений</div></td>
+					<td class="menu_footer">&nbsp;</td>					
 				</tr>			
 			</table>
 		</div>
