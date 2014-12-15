@@ -26,13 +26,12 @@
 	{
 	
 		$date = $formatter -> toStringChangedDateWithYear($dialog_row['date_sending']);
-	
-		if ((($my_id == $dialog_row['id_user_from']) and ($dialog_row['id_sender_delete'] == 0)) or 
-			(($my_id != $dialog_row['id_user_from']) and ($dialog_row['id_recipient_delete'] == 0)))
+
+		if ((($my_id == $dialog_row['id_user_from']) and ($dialog_row['is_sender_delete'] == 0)) or 
+			(($my_id != $dialog_row['id_user_from']) and ($dialog_row['is_recipient_delete'] == 0)))
 		{
 				echo " <div class='dialog_item' id=item_".$dialog_row['id'].">
-							<div class='chbox'> <input type='checkbox' class='chbox' name='cb[]' id=".$dialog_row['id']." /> </div>";	
-				
+							<div class='chbox'> <input type='checkbox' class='chbox' name='cb[]' id=".$dialog_row['id']." /> </div>";					
 				echo "   <div class='dialogs_data' data-id=".$dialogs_row['id_user_from'].">";			
 				if (($dialog_row['is_readed'] == 1) or ($dialog_row['id_user_from'] == $my_id))
 					echo 	"<div class='message'>";

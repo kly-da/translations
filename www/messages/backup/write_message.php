@@ -13,7 +13,7 @@
 	include('../header.php');	
 	
 	
-	$id_user_to=$_POST['id_user_to'];
+	$id_user_to=$_GET['id_user_to'];
 	if (!empty ($id_user_to))
 	{
 		$sqlQueryUserName = "SELECT  `name` FROM  `user` WHERE  `user_id` = '$id_user_to'";

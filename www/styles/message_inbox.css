@@ -121,3 +121,25 @@ div.message_unreaded  {
 span.text{
 	margin: 5px 0 5px 5px;
 }
+a.first_page_link:link,a.first_page_link:visited{
+	border:1px solid #808080;
+	text-align:center;
+	height:20px;
+	padding:4px 9px 4px 9px;
+	font:14px Arial,Helvetica,sans-serif;
+	border-radius:3pt;
+	text-decoration: none;
+	color:#000;
+	font-weight:bold;
+	text-decoration:none;
+}
+.num_page_not_link
+{
+	font:14px Arial,Helvetica,sans-serif;
+	color:#0000ff;
+	border-bottom:2px solid #0000ff;
+	text-align:center;
+	height:18px;
+	padding:4px 10px 4px 10px;
+}
+

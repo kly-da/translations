@@ -6,7 +6,7 @@
   // $user - информация о текущем пользователе
   
   //Код компонента - здесь
-
+ 
   function additionalPageHeader() {
 ?>
   <link rel="stylesheet" type="text/css" href="/styles/message_inbox.css">
@@ -14,11 +14,13 @@
 
   $title = "Входящие сообщения";
   include('../header.php');
- 
+  
+  $p=$_GET['p'];
 ?>
 <script>  
 	var intervalID;
-
+	var p = "<? echo $p ?>";
+	
 	function SetMessagesCount(){
 		$.ajax({  
 			url: "messages_count.php",  
@@ -33,7 +35,9 @@
 	{  		
 		SetMessagesCount();		
 		$.ajax({  
+			type: "GET",
 			url: "../ajax/inbox.php",  
+			data: {p:p},
 			cache: false,  
 			success: function(html){  
 				$("#messages_content").html(html);  
@@ -54,7 +58,7 @@
 		else {
 			$.ajax({  
 			type: "POST",
-			url: "../deleting.php", 
+			url: "deleting.php", 
 			data: {mas:mas,from:"inbox"},			
 			cache: false,  
 			//success: function(html){  
@@ -63,11 +67,38 @@
 		}); 
 		};
 	}
+		
 	
 	function MarkMessagesAsSpam() {
-		DeleteMessages();
-		//далее код наказания злостного спамера
-		alert("Злостный спамер будет наказан!")
+		var cbx = document.getElementById("messages_content").getElementsByTagName("input"), mas = [],mes;
+		for (i=0; i < cbx.length; i++) {
+			if (cbx[i].type == "checkbox" && cbx[i].checked) {
+				mas.push(cbx[i].id);
+				mes = document.getElementById("item_"+cbx[i].id);
+				mes.style.display = "none";
+			}
+		}
+		if (mas.length == 0) alert("Не выбрал ни одного! Обмануть вздумал?!");
+		else {
+			$.ajax({  
+			type: "POST",
+			url: "deleting.php", 
+			data: {mas:mas,from:"inbox"},			
+			cache: false,  
+			//success: function(html){  
+			//	$("#test").html(html);  
+			//}  
+			}); 
+			$.ajax({  
+			type: "POST",
+			url: "spam.php", 
+			data: {mas:mas},			
+			cache: false,  
+			//success: function(html){  
+			//	$("#test").html(html);  
+			//}  
+			}); 
+		};
 	}
 	
 	$(document).ready(function(){  	
@@ -84,6 +115,14 @@
             }
 		});
 		
+		$("#delete_button").click( function() { 
+			DeleteMessages();
+		});	
+
+		$("#spam_button").click( function() { 
+			MarkMessagesAsSpam();
+		});			
+		
 		$('#messages_content').on('click', '.messages_data', function(event) {
 			var userid = $(this).attr('user-id');
 			var msgid  = $(this).attr('id');
@@ -99,7 +138,7 @@
 				<td class="menu_header_current"><div id="label_1" class="menu_item" onclick="location.href='./inbox.php';">Входящие</div> </td>
 				<td class="menu_header"><div class="menu_item" onclick="location.href='./sent.php';">Отправленные</div></td>
 				<td class="menu_header">&nbsp;</td>
-				<td class="menu_header"><div class="menu_item" onclick="location.href='./write_message.php';">Написать письмо</div></td>
+				<td class="menu_header"><div class="menu_item" onclick="location.href='./write_message.php?mode=1';">Написать письмо</div></td>
 			</tr>			
 		</table>
 	</div>
@@ -109,7 +148,7 @@
 					<tr class="menu_header">
 						<td class="menu_footer_chbox"><div class='mainchbox'><input type='checkbox' name='cb[]' id='maincbox'/></div><label for="maincbox" class='chbox_label'>Выделить все</label></td>
 						<td class="menu_footer"><div class="menu_item" id="delete_button">Удалить</div></td>
-						<td class="menu_footer"><div class="menu_item" onclick='MarkMessagesAsSpam()'>Спам</div></td>
+						<td class="menu_footer"><div class="menu_item" id="spam_button">Спам</div></td>
 						<td class="menu_footer"><div class="menu_item" onclick="location.href='./dialogs_list.php';">В режим диалогов</div></td>
 						<td class="menu_footer">&nbsp;</td>					
 					</tr>			

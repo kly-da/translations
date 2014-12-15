@@ -23,8 +23,7 @@
 	
 	function DeleteDialog() {
 		var cbx = document.getElementById("dialogs_content").getElementsByTagName("input"), mas = [],el,input_item;
-		for (i=0; i < cbx.length; i++) {	
-			
+		for (i=0; i < cbx.length; i++) {			
 			if (cbx[i].type == "checkbox" && cbx[i].checked) {
 				var num = cbx[i].getAttribute("input-id");
 				mas.push(num);
@@ -32,19 +31,19 @@
 				el.style.display = "none";
 			}
 		}
-		if (mas.length == 0) alert("Не выбрал ни одного! Обмануть вздумал?!");
-		else {
+		if (mas.length != 0) 
+		{
 			$.ajax({  
 			type: "POST",
 			url: "deleting.php", 
 			data: {mas:mas,from:"dialogs_list"},			
 			cache: false,  
-			success: function(html){  
-				$("#test").html(html);  
-			}  
+			//success: function(html){  
+			//	$("#test").html(html);  
+			//}  
 			}); 
-		};
-	}
+		}
+	};
 	
 	$(document).ready(function(){
 		loadDialogs();
@@ -78,7 +77,7 @@
 					<td class="menu_header"><div id="dlgs_label" class="menu_item" onclick="location.href='index.php';">Диалоги</div> </td>
 					<td class="menu_header"><div id="dlg_label" class="menu_item"></div> </td>
 					<td class="menu_header">&nbsp;</td>
-					<td class="menu_header"><div class="menu_item" onclick="location.href='../write_message.php';">Написать письмо</div></td>
+					<td class="menu_header"><div class="menu_item" onclick="location.href='write_message.php?mode=0';">Написать письмо</div></td>
 				</tr>			
 			</table>
 		</div>
@@ -90,7 +89,7 @@
 				<tr class="menu_header">
 					<td class="menu_footer_chbox"><div class='mainchbox'><input type='checkbox' name='cb[]' id='maincbox'/></div><label for="maincbox" class='chbox_label'>Выделить все</label></td>
 					<td class="menu_footer"><div class="menu_item" id="delete_button">Удалить</div></td>
-					<td class="menu_footer"><div class="menu_item" onclick='MarkMessagesAsSpam()'>Спам</div></td>
+					<td class="menu_footer"><div class="menu_item">&nbsp;</div></td>
 					<td class="menu_footer"><div class="menu_item" onclick="location.href='./inbox.php';">В режим сообщений</div></td>
 					<td class="menu_footer">&nbsp;</td>					
 				</tr>			

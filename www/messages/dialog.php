@@ -152,7 +152,7 @@
 	};
 		
 	function DeleteMessages() {
-		var cbx = document.getElementById("messages_content").getElementsByTagName("input"), mas = [],mes;
+		var cbx = document.getElementById("dialog_content").getElementsByTagName("input"), mas = [],mes;
 		for (i=0; i < cbx.length; i++) {
 			if (cbx[i].type == "checkbox" && cbx[i].checked) {
 				mas.push(cbx[i].id);
@@ -164,16 +164,47 @@
 		else {
 			$.ajax({  
 			type: "POST",
-			url: "../deleting.php", 
+			url: "deleting.php", 
 			data: {mas:mas,from:"dialog"},			
+			cache: false, 		
+			success: function(html){  
+				$("#test").html(html);  
+			}  
+			}); 
+		}
+	}
+
+	function MarkMessagesAsSpam() {
+		var cbx = document.getElementById("dialog_content").getElementsByTagName("input"), mas = [],mes;
+		for (i=0; i < cbx.length; i++) {
+			if (cbx[i].type == "checkbox" && cbx[i].checked) {
+				mas.push(cbx[i].id);
+				mes = document.getElementById("item_"+cbx[i].id);
+				mes.style.display = "none";
+			}
+		}
+		if (mas.length == 0) alert("Не выбрал ни одного! Обмануть вздумал?!");
+		else {
+			$.ajax({  
+			type: "POST",
+			url: "deleting.php", 
+			data: {mas:mas,from:"inbox"},			
 			cache: false,  
 			//success: function(html){  
 			//	$("#test").html(html);  
 			//}  
-		}); 
+			}); 
+			$.ajax({  
+			type: "POST",
+			url: "spam.php", 
+			data: {mas:mas},			
+			cache: false,  
+			//success: function(html){  
+			//	$("#test").html(html);  
+			//}  
+			}); 
 		};
 	}
-
 		
 	$(document).ready(function(){
 		if (mode==0) 
@@ -217,9 +248,13 @@
 			}
 		});	
 		
-		//$('#dialog_content').on('scroll', function() {
-			//if ((this.scrollTop + this.clientHeight) == this.scrollHeight) {alert("конец");}
-		//});			
+		$("#delete_button").click( function() { 
+			DeleteMessages();
+		});	
+
+		$("#spam_button").click( function() { 
+			MarkMessagesAsSpam();
+		});				
 	});
 	
 	$(document).ready(function(){
@@ -244,7 +279,7 @@
 					<td id="td_1" class="menu_header"><div id="label_1" class="menu_item"></div> </td>
 					<td id="td_2" class="menu_header"><div id="label_2" class="menu_item"></div> </td>
 					<td id="td_3" class="menu_header"><div id="label_3" class="menu_item"></div> </td>
-					<td class="menu_header"><div class="menu_item" onclick="location.href='write_message.php';">Написать письмо</div></td>
+					<td class="menu_header"><div class="menu_item" onclick="location.href='write_message.php?mode=0';">Написать письмо</div></td>
 				</tr>			
 			</table>
 		</div>
@@ -265,7 +300,7 @@
 				<tr class="menu_header">
 					<td class="menu_footer_chbox"><div class='mainchbox'><input type='checkbox' name='cb[]' id='maincbox'/></div><label for="maincbox" class='chbox_label'>Выделить все</label></td>
 					<td class="menu_footer"><div class="menu_item" id="delete_button">Удалить</div></td>
-					<td class="menu_footer"><div class="menu_item" onclick='MarkMessagesAsSpam()'>Спам</div></td>
+					<td class="menu_footer"><div class="menu_item" id="spam_button">Спам</div></td>
 					<td class="menu_footer">&nbsp;</td>
 					<td class="menu_footer">&nbsp;</td>					
 				</tr>			
