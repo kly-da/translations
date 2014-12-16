@@ -104,7 +104,7 @@
 				<?foreach ($fragments as $frag_num => $fragment) {?>
 					<tr>
 						<?$rowspan = $trans_count[$frag_num];
-						if (!$translated[$frag_num])
+						if (!$translated[$frag_num] && $can_translate)
 							$rowspan++;?>
 						<td rowspan="<?=$rowspan?>"><?=$frag_num?></td>
 						<td rowspan="<?=$rowspan?>"><?=$fragment["text"]?></td>
@@ -112,71 +112,17 @@
 							<?if ($trans_num != 1) {?>
 							<tr>
 							<?}?>
-								<td>
-									<div id="content_<?=$frag_num?>"><?=$translation["text"]?>
-								<?if ($translation["user_id"] == $user_id) {?>
-									<br>
-									<input type="button" class="add_edit" value="Редактировать..." data-id="<?=$frag_num?>">
-									</div>
-									<div id="form_<?=$frag_num?>" style="display: none">
-										<form>
-											Перевод:<br>
-											<textarea style="width: 100%" rows="10" 
-												id="text_<?=$frag_num?>"><?=$translation["text"]?></textarea><br>
-											<input type="hidden" id="len_<?=$frag_num?>" value="1">
-											<input type="hidden" id="tid_<?=$frag_num?>" 
-												value="<?=$translation["translation_id"]?>">
-											<input type="button" class="ok_edit" value="Ок" 
-												data-id="<?=$fragment["fragment_id"]?>">
-											<input type="button" class="cancel" value="Отмена" data-id="<?=$frag_num?>">
-										</form>
-									</div>
-								<?} else {?>
-									</div>
-								<?}?>
-								</td>
-								<?$allow = 1; if ($translation["user_id"] == $user_id) $allow = 0;?>
-								<td>
-									<input type="button" class="rate" mark="1" uid="<?=$user_id?>" 
-										data-id="<?=$translation["translation_id"]?>" allow="<?=$allow?>" value="+">
-									<span id="like_<?=$translation["translation_id"]?>">
-										<?=$trans_like[$translation["translation_id"]]?></span>
-								</td>
-								<td>
-									<input type="button" class="rate" mark="-1" uid="<?=$user_id?>" 
-										data-id="<?=$translation["translation_id"]?>" allow="<?=$allow?>" value="-">
-									<span id="dislike_<?=$translation["translation_id"]?>">
-										<?=$trans_dislike[$translation["translation_id"]]?></span>
-								</td>
+							<td>
+							<div id="content_<?=$frag_num?>"><?=$translation["text"]?>
+							<?include('templates/edit.tpl')?>
+							</div></td>
+							<?$allow = 1; if ($translation["user_id"] == $user_id) $allow = 0;?>
+							<?include('templates/rate.tpl')?>
 							</tr>
 						<?}?>
+
+						<?include('templates/add.tpl');?>	
 						
-						
-						<?if (!$translated[$frag_num]) {
-							if ($trans_count[$frag_num] == 0) {?>
-							<td colspan=3>
-								<div id="content_<?=$frag_num?>">
-									Пока переводов нет
-						<?} else {?>
-							<tr>
-							<td colspan=3>
-								<div id="content_<?=$frag_num?>">
-						<?}?>
-									<input type="button" class="add_edit" value="Добавить..." data-id="<?=$frag_num?>">
-								</div>
-								<div id="form_<?=$frag_num?>" style="display: none">
-									<form>
-										Перевод:<br>
-										<textarea style="width: 100%" rows="10" id="text_<?=$frag_num?>"></textarea><br>
-										<input type="hidden" id="len_<?=$frag_num?>" value="1">
-										<input type="hidden" id="uid_<?=$frag_num?>" value="<?=$user_id?>">
-										<input type="button" class="ok_add" value="Ок" data-id="<?=$fragment["fragment_id"]?>">
-										<input type="button" class="cancel" value="Отмена" data-id="<?=$frag_num?>">
-									</form>
-								</div>
-							</td>
-						<?}?>
-						</tr>
 				<?}?>
 				
 			</table>
