@@ -270,3 +270,10 @@
   text-align: left;
 }
 
+td.best {
+  background-color: #00ff00;
+}
+
+td.banned {
+  background-color: #ff0000;
+}

@@ -80,9 +80,37 @@
 		});
 	});
 	
+	$(document).ready(function(){
+		$('#translate_table').on('click', '.ban', function(event) {
+			
+			var $num = $(this).attr('data-id');
+			var $status = $(this).attr('status');
+			
+			$.post("./db/ban.php", {tid: $num, status: $status}, function(ok) {
+					location.reload();
+				}
+			);
+			
+		});
+	});	
+	
+	$(document).ready(function(){
+		$('#translate_table').on('click', '.best', function(event) {
+			
+			var $num = $(this).attr('data-id');
+			var $pid = $(this).attr('pid');
+			
+			$.post("./db/best.php", {tid: $num, pid: $pid}, function(ok) {
+					location.reload();
+				}
+			);
+			
+		});
+	});	
+	
 </script>
 
-	<link rel="stylesheet" type="text/css" href="/styles/chapter_main.css">
+	<link rel="stylesheet" type="text/css" href="../styles/chapter_main.css">
 <?
 	include('../header.php');
 ?>
@@ -98,7 +126,7 @@
 				<tr>
 					<th>№</th>
 					<th>Отрывок</th>
-					<th colspan=3>Перевод</th>
+					<th colspan=<?=$trans_cols?>>Перевод</th>
 				</tr>
 				
 				<?foreach ($fragments as $frag_num => $fragment) {?>
@@ -108,16 +136,19 @@
 							$rowspan++;?>
 						<td rowspan="<?=$rowspan?>"><?=$frag_num?></td>
 						<td rowspan="<?=$rowspan?>"><?=$fragment["text"]?></td>
-						<?foreach ($translations[$frag_num] as $trans_num => $translation) {?>					
+						<?foreach ($translations[$frag_num] as $trans_num => $translation) {
+							$content = $translation["text"];?>					
 							<?if ($trans_num != 1) {?>
 							<tr>
 							<?}?>
-							<td>
-							<div id="content_<?=$frag_num?>"><?=$translation["text"]?>
+							<td <?if ($translation["best"]) {?>class="best"<?}?>
+								<?if ($translation["banned"]) { $content="Текст заблокирован модератором"?>class="banned"<?}?>>
+							<div id="content_<?=$frag_num?>"><?=$content?>
 							<?include('templates/edit.tpl')?>
 							</div></td>
 							<?$allow = 1; if ($translation["user_id"] == $user_id) $allow = 0;?>
 							<?include('templates/rate.tpl')?>
+							<?include('templates/moderate.tpl')?>
 							</tr>
 						<?}?>
 

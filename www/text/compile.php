@@ -46,10 +46,19 @@
 	{
 		
 		$i++;
-		$inner_query = 'SELECT `fragment_id`, MAX(`rating`) AS `rating` FROM `translation` WHERE `fragment_id` = ' . $fragment_row["fragment_id"] . ' GROUP BY `fragment_id`';
-		$trans_query = 'SELECT `t`.`translation_id`, `t`.`fragment_id`, `t`.`rating`, `t`.`text` FROM `translation` `t` INNER JOIN (' . $inner_query . ') `s` ON `s`.`fragment_id` = `t`.`fragment_id` AND `s`.`rating` = `t`.`rating`';
-		$trans_result = mysql_query($trans_query);
-		$row = mysql_fetch_assoc($trans_result);
+		$best_query = 'SELECT `translation_id`, `fragment_id`, `rating`, `text` FROM `translation` WHERE `best` = 1 AND `fragment_id` = ' . $fragment_row["fragment_id"];
+		$best_result = mysql_query($best_query);
+		$row = mysql_fetch_assoc($best_result);
+		if (!$row)
+		{
+			$inner_query = 'SELECT `fragment_id`, MAX(`rating`) AS `rating` FROM `translation` WHERE `banned` = 0 AND `fragment_id` = ' . $fragment_row["fragment_id"] . ' GROUP BY `fragment_id`';
+			$trans_query = 'SELECT `t`.`translation_id`, `t`.`fragment_id`, `t`.`rating`, `t`.`text` FROM `translation` `t` INNER JOIN (' . $inner_query . ') `s` ON `s`.`fragment_id` = `t`.`fragment_id` AND `s`.`rating` = `t`.`rating`';
+			$trans_result = mysql_query($trans_query);
+			$row = mysql_fetch_assoc($trans_result);
+		}
+
+		
+		
 		if ($row)
 			$chapter_translation = $chapter_translation . ' ' . $row["text"];
 		else

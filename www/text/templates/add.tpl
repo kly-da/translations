@@ -2,7 +2,7 @@
 <?if ($trans_count[$frag_num] != 0) {?>
 <tr>
 <?}?>
-	<td colspan="3">
+	<td colspan=<?=$trans_cols?>>
 	<div id="content_<?=$frag_num?>">
 		<? if ($trans_count[$frag_num] == 0) {?>
 			Переводов пока нет.
