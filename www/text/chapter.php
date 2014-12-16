@@ -39,7 +39,8 @@
 
 	$user -> loadTextOut($text_row);
 	$user_id = $user->uid;
-	$can_translate = $user->isTextTranslator() || $user->isAdministrator();
+	$can_translate = $user->isTextTranslator() || $user->isTextModerator() || 
+		$user->isAdministrator() || ($text_row["access"] == 1);
 
 	if ($text_row["is_deleted"])
 	{
@@ -55,17 +56,19 @@
 	$trans_like = array();
 	$trans_dislike = array();
 	$translated = array();
+	$best_trans = array();
 	
 	$frag_num = 1;
 	while ($fragment_row = mysql_fetch_assoc($fragment_result))
 	{		
 		$fragments[$frag_num] = $fragment_row;
-		$trans_query = 'SELECT `translation_id`, `fragment_id`, `user_id`, `text` FROM `translation` WHERE 
+		$trans_query = 'SELECT `translation_id`, `fragment_id`, `user_id`, `text`, `banned`, `best` FROM `translation` WHERE 
 			`fragment_id` = ' . $fragment_row["fragment_id"];
 		$trans_result = mysql_query($trans_query);
 		$trans_count[$frag_num] = mysql_num_rows($trans_result);
 		$translations[$frag_num] = array();
 		$translated[$frag_num] = false;
+		$best_trans[$frag_num] = 0;
 		
 		$trans_num = 1;
 		while ($trans_row = mysql_fetch_assoc($trans_result))
@@ -76,6 +79,10 @@
 			{
 				$translated[$frag_num] = true;
 			}
+			if ($trans_row["best"] == true)
+			{
+				$best_trans[$frag_num] = $trans_id;
+			}
 			$trans_like[$trans_id] = mysql_num_rows(mysql_query('SELECT `rating_id`, `translation_id`, `mark` FROM `rating` WHERE
 				`translation_id` = ' . $trans_id . ' AND `mark` = 1'));
 			$trans_dislike[$trans_id] = mysql_num_rows(mysql_query('SELECT `rating_id`, `translation_id`, `mark` FROM `rating` WHERE
@@ -85,6 +92,9 @@
 		$frag_num++;
 	}
 	$title = 'Редактирование';
+	$trans_cols = 3;
+	if ($user->isTextModerator())
+		$trans_cols = 5;
 	include('./templates/chapter.tpl');
 ?>
 
