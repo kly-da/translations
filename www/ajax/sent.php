@@ -49,10 +49,10 @@
 				else
 					echo	"<div class='message_unreaded'>";					
 				echo "			
-								<div class='message_name'>" . $name. " </div>"; 				
+								<div class='message_name'>Кому: " . $name. " </div>"; 				
 				echo "				
 								<div class='message_date'>" . $date . " в " . date("H:i:s", strtotime($sent_row['date_sending'])) . "</div>
-								<div class='message_text'>" . substr($sent_row['text'],0,100) . "</div> 
+								<div class='message_text'>" . mb_substr($sent_row['text'],0,80,'UTF-8') . "</div> 
 							</div>	
 					  </div>	
 					</div>";				

@@ -36,8 +36,9 @@
 				if (($dialog_row['is_readed'] == 1) or ($dialog_row['id_user_from'] == $my_id))
 					echo 	"<div class='message'>";
 				else
-				{
 					echo	"<div class='message_unreaded'>";
+				if ($dialog_row['id_user_from'] <> $my_id)	
+				{					
 					$change_query = "UPDATE `message` SET `is_readed`='1' WHERE `id` = ".$dialog_row['id'];
 					$change_result = mysql_query($change_query);
 				}	
