@@ -4,6 +4,12 @@
 	include('../../mod_auth.php');
 	include('../../code/text_format.php');
 
+	if (!$user->isTextTranslator() && !$user->isAdministrator())
+	{
+		echo 0;
+		die;
+	}
+
 	mysql_query("SET NAMES utf8");
 
 	$ok = 0;

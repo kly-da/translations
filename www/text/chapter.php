@@ -38,7 +38,8 @@
 	}
 
 	$user -> loadTextOut($text_row);
-	$user_id = 1;
+	$user_id = $user->uid;
+	$can_translate = $user->isTextTranslator() || $user->isAdministrator();
 
 	if ($text_row["is_deleted"])
 	{
