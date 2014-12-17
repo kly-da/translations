@@ -1,0 +1,8 @@
+.article {
+	width: 99%;
+	margin-bottom: 15px;
+}
+
+.article:hover {
+	background: #d0d2ff;
+}
