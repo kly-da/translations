@@ -59,7 +59,6 @@
 			var $cid = $("#cid_" + $num).val();
 			
 			
-			
 			$.post("./db/insert_translation.php", {cid: $cid, fid: $fid, uid: $uid, len: $len, text: $text}, function(ok) {
 					location.reload();
 				}
@@ -77,7 +76,6 @@
 			var $tid = $("#tid_" + $num).val();
 			var $fid = $("#fid_" + $num).val();
 			
-			alert($num + " " + $text + " " + $len + " " + $tid);
 			
 			$.post("./db/edit_translation.php", {tid: $tid, len: $len, text: $text}, function(ok) {
 					location.reload();
@@ -93,8 +91,6 @@
 			var $num = $(this).attr('data-id');
 			var $cid = $(this).attr('cid');
 			var $status = $(this).attr('status');
-			
-			alert($num + " " + $cid + " " + $status);
 			
 			$.post("./db/ban.php", {tid: $num, cid: $cid, status: $status}, function(ok) {
 					location.reload();
