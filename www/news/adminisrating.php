@@ -7,6 +7,15 @@
 ?>
 
   <div class="content" style="border: 0px;">
+	<?
+	if(!isset($_GET['id'])){
+				$id=1;
+			}else
+			{
+				$id=$_GET['id'];
+			}
+	?>
+	
     <form action="app/write_new.php" method="post">
 			<p>Заголовок новости: <input name="tetle" type="text"></p>
 			<p>Текст новости: <br /><textarea name="message" cols="30" rows="5"></textarea></p>

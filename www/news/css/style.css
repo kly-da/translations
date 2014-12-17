@@ -1,0 +1,17 @@
+.article {
+	width: 99%;
+	margin-bottom: 15px;
+}
+
+.article:hover {
+	background: #d0d2ff;
+}
+
+.news_title {
+	width: 99%;
+	margin-bottom: 15px;
+}
+
+.news_title:hover {
+	background: #d0d2ff;
+}
