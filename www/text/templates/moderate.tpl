@@ -2,10 +2,10 @@
 <span class="moderate">
 	<?if (!$translation["banned"]) {?>
 		<input type="image" src="../logo/ban.png" class="ban" status="ban"
-			data-id="<?=$translation["translation_id"]?>" value="#">
+			cid="<?=$chapter_id?>" data-id="<?=$translation["translation_id"]?>" value="#">
 	<?} else {?>
 		<input type="image" src="../logo/unban.png" class="ban" status="unban" 
-			data-id="<?=$translation["translation_id"]?>" value="~">
+			cid="<?=$chapter_id?>" data-id="<?=$translation["translation_id"]?>" value="~">
 	<?}?>
 </span>
 <span class="moderate">

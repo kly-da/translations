@@ -5,4 +5,5 @@
     die();
   }
   mysql_select_db('translations');
+  mysql_query("SET NAMES utf8");
 ?>

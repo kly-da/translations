@@ -56,10 +56,11 @@
 			var $len = $("#len_" + $num).val();
 			var $uid = $("#uid_" + $num).val();
 			var $fid = $("#fid_" + $num).val();
+			var $cid = $("#cid_" + $num).val();
 			
 			
 			
-			$.post("./db/insert_translation.php", {fid: $fid, uid: $uid, len: $len, text: $text}, function(ok) {
+			$.post("./db/insert_translation.php", {cid: $cid, fid: $fid, uid: $uid, len: $len, text: $text}, function(ok) {
 					location.reload();
 				}
 			);
@@ -90,9 +91,12 @@
 		$('#translate_table').on('click', '.ban', function(event) {
 			
 			var $num = $(this).attr('data-id');
+			var $cid = $(this).attr('cid');
 			var $status = $(this).attr('status');
 			
-			$.post("./db/ban.php", {tid: $num, status: $status}, function(ok) {
+			alert($num + " " + $cid + " " + $status);
+			
+			$.post("./db/ban.php", {tid: $num, cid: $cid, status: $status}, function(ok) {
 					location.reload();
 				}
 			);
