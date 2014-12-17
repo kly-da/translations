@@ -77,8 +77,6 @@
 			var $tid = $("#tid_" + $num).val();
 			var $fid = $("#fid_" + $num).val();
 			
-			alert($num + " " + $text + " " + $len + " " + $tid);
-			
 			$.post("./db/edit_translation.php", {tid: $tid, len: $len, text: $text}, function(ok) {
 					location.reload();
 				}
