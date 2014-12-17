@@ -5,6 +5,7 @@
 
 .article:hover {
 	background: #d0d2ff;
+<<<<<<< HEAD
 }
 
 .news_title {
@@ -14,4 +15,6 @@
 
 .news_title:hover {
 	background: #d0d2ff;
+=======
+>>>>>>> 851bfc8e1dba7291e36748c6e92f79536780a3e8
 }
