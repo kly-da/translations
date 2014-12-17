@@ -32,10 +32,10 @@
 	if ($ok)
 	{
 		if ($mark == 1)
-			$trans_query = 'UPDATE `translation` SET `likes` = `likes` + 1, `rating` = `rating` + 1 
+			$trans_query = 'UPDATE `translation` SET `likes` = `likes` + 1, `rating` = `likes` - `dislikes` 
 				WHERE `translation_id` = ' . $tid;
 		else
-			$trans_query = 'UPDATE `translation` SET `dislikes` = `dislikes` + 1, `rating` = `rating` + 1 
+			$trans_query = 'UPDATE `translation` SET `dislikes` = `dislikes` + 1, `rating` = `likes` - `dislikes` 
 				WHERE `translation_id` = ' . $tid;
 		$ok = mysql_query($trans_query);
 	}
