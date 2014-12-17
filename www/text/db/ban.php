@@ -1,6 +1,7 @@
 <?
 	
 	$tid = intval($_POST["tid"]);
+	$cid = intval($_POST["cid"]);
 	$status = $_POST["status"];
 	if ($tid <= 0)
 	{
@@ -22,6 +23,13 @@
 		$trans_query = 'UPDATE `translation` SET `banned` = 0 WHERE `translation_id` = ' . $tid;
 	}
 	$ok = mysql_query($trans_query);
+	
+	$count_query = 'SELECT count( DISTINCT(`fragment_id`) ) as `total` FROM `translation` WHERE `banned` = 0 AND `chapter_id` = '. $cid;
+	$count_result = mysql_query($count_query);
+	$count_row = mysql_fetch_assoc($count_result);
+	$total = $count_row["total"];
+	$update_query = 'UPDATE `chapter` SET `translated_fragments_count` = ' . $total . ' WHERE `chapter_id` = ' . $cid;
+	mysql_query($update_query);
 	
 	echo $ok;
 

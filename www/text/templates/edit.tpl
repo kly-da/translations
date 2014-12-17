@@ -10,8 +10,10 @@
 			<input type="hidden" id="len_<?=$frag_num?>" value="1">
 			<input type="hidden" id="tid_<?=$frag_num?>" 
 				value="<?=$translation["translation_id"]?>">
+			<input type="hidden" id="fid_<?=$frag_num?>" 
+				value="<?=$fragment["fragment_id"]?>">
 			<input type="button" class="ok_edit" value="Ок" 
-				data-id="<?=$fragment["fragment_id"]?>">
+				data-id="<?=$frag_num?>">
 			<input type="button" class="cancel" value="Отмена" data-id="<?=$frag_num?>">
 		</form>
 	</div>

@@ -55,8 +55,12 @@
 			var $text = $("#text_" + $num).val();
 			var $len = $("#len_" + $num).val();
 			var $uid = $("#uid_" + $num).val();
+			var $fid = $("#fid_" + $num).val();
+			var $cid = $("#cid_" + $num).val();
 			
-			$.post("./db/insert_translation.php", {fid: $num, uid: $uid, len: $len, text: $text}, function(ok) {
+			
+			
+			$.post("./db/insert_translation.php", {cid: $cid, fid: $fid, uid: $uid, len: $len, text: $text}, function(ok) {
 					location.reload();
 				}
 			);
@@ -71,6 +75,9 @@
 			var $text = $("#text_" + $num).val();
 			var $len = $("#len_" + $num).val();
 			var $tid = $("#tid_" + $num).val();
+			var $fid = $("#fid_" + $num).val();
+			
+			alert($num + " " + $text + " " + $len + " " + $tid);
 			
 			$.post("./db/edit_translation.php", {tid: $tid, len: $len, text: $text}, function(ok) {
 					location.reload();
@@ -84,9 +91,12 @@
 		$('#translate_table').on('click', '.ban', function(event) {
 			
 			var $num = $(this).attr('data-id');
+			var $cid = $(this).attr('cid');
 			var $status = $(this).attr('status');
 			
-			$.post("./db/ban.php", {tid: $num, status: $status}, function(ok) {
+			alert($num + " " + $cid + " " + $status);
+			
+			$.post("./db/ban.php", {tid: $num, cid: $cid, status: $status}, function(ok) {
 					location.reload();
 				}
 			);
@@ -126,29 +136,33 @@
 				<tr>
 					<th>№</th>
 					<th>Отрывок</th>
-					<th colspan=<?=$trans_cols?>>Перевод</th>
+					<th>Перевод</th>
 				</tr>
 				
 				<?foreach ($fragments as $frag_num => $fragment) {?>
 					<tr>
-						<?$rowspan = $trans_count[$frag_num];
+						<?$rowspan = $trans_count[$frag_num] * 2;
 						if (!$translated[$frag_num] && $can_translate)
 							$rowspan++;?>
-						<td rowspan="<?=$rowspan?>"><?=$frag_num?></td>
+						<td class="num" rowspan="<?=$rowspan?>"><?=$frag_num?></td>
 						<td rowspan="<?=$rowspan?>"><?=$fragment["text"]?></td>
 						<?foreach ($translations[$frag_num] as $trans_num => $translation) {
 							$content = $translation["text"];?>					
 							<?if ($trans_num != 1) {?>
 							<tr>
 							<?}?>
-							<td <?if ($translation["best"]) {?>class="best"<?}?>
-								<?if ($translation["banned"]) { $content="Текст заблокирован модератором"?>class="banned"<?}?>>
+							<td class="trans<?if ($trans_num == 1) {?> first<?}?><?if ($translation["best"]) {?> best<?}?><?if ($translation["banned"]) {?> banned<?}?>">
 							<div id="content_<?=$frag_num?>"><?=$content?>
 							<?include('templates/edit.tpl')?>
 							</div></td>
 							<?$allow = 1; if ($translation["user_id"] == $user_id) $allow = 0;?>
-							<?include('templates/rate.tpl')?>
-							<?include('templates/moderate.tpl')?>
+							</tr>
+							<tr style="border-top: 0;">
+								<td class="opt">
+									<span class="username"><a href="../user/view.php?id=<?=$translation["user_id"]?>"><?=$translation["name"]?></a></span>
+									<?include('templates/rate.tpl')?>
+									<?include('templates/moderate.tpl')?>
+								</td>
 							</tr>
 						<?}?>
 
@@ -161,6 +175,11 @@
 			<br>
 			
 		</div>
+		<table class="chapters" width="100%">
+			<tr>
+				<td><a href="#">Предыдущая глава</a></td><td><a href="#">Следующая глава</a></td>
+			</tr>
+		<table>
 	</div>
 	<div style="clear:right;"/></div>
   
