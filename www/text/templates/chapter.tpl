@@ -154,7 +154,7 @@
 							<?$allow = 1; if ($translation["user_id"] == $user_id) $allow = 0;?>
 							</tr>
 							<tr style="border-top: 0;">
-								<td class="opt">
+								<td class="<?if ($trans_num == $trans_count[$frag_num] && !$allow) {?>lastopt<?} else {?>opt<?}?>">
 									<span class="username"><a href="../user/view.php?id=<?=$translation["user_id"]?>"><?=$translation["name"]?></a></span>
 									<?include('templates/rate.tpl')?>
 									<?include('templates/moderate.tpl')?>
