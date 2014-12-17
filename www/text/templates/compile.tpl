@@ -1,5 +1,5 @@
 <script type="text/javascript" src="../scripts/jquery-1.7.2.min.js"></script>
-<link rel="stylesheet" type="text/css" href="/styles/chapter_main.css">
+<link rel="stylesheet" type="text/css" href="../styles/chapter_main.css">
 
 <script>
 	$(document).ready(function(){
@@ -26,12 +26,12 @@
 				<?=$chapter_row["chapter_name"]?></div>
 		</div>
 		<div>
-			<?=$chapter_translation?>	
+			<div width="100%"><?=$chapter_translation?></div>
 			<form>
 				<input type="hidden" id="trans" value="<?=$chapter_translation?>"/>		
 				<input type="hidden" id="text_id" value="<?=$text_id?>"/>
 				<input type="hidden" id="chapter_id" value="<?=$chapter_id?>"/>
-				<input type="button" id="save" value="Сохранить перевод" <?if (!$full) {?>disabled="<?}?>" />
+				<input type="button" id="save" value="Сохранить перевод" <?if (!$full) {?>disabled<?}?> />
 			</form>
 		</div>
 	</div>

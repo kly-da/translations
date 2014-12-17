@@ -12,12 +12,6 @@
 	include('../../mod_db.php');
 	include('../../mod_auth.php');
 	include('../../code/text_format.php');
-	
-	if (!$user->isRegistered())
-	{
-		echo 0;
-		die();
-	}
 
 	mysql_query("SET NAMES utf8");
 

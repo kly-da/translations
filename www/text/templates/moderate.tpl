@@ -1,15 +1,15 @@
-<?if ($user->isTextModerator()) {?>
-<td>
+<?if ($moderate) {?>
+<span class="moderate">
 	<?if (!$translation["banned"]) {?>
-		<input type="button" class="ban" status="ban"
+		<input type="image" src="../logo/ban.png" class="ban" status="ban"
 			data-id="<?=$translation["translation_id"]?>" value="#">
 	<?} else {?>
-		<input type="button" class="ban" status="unban" 
+		<input type="image" src="../logo/unban.png" class="ban" status="unban" 
 			data-id="<?=$translation["translation_id"]?>" value="~">
 	<?}?>
-</td>
-<td>
-	<input type="button" class="best" 
+</span>
+<span class="moderate">
+	<input type="image" src="../logo/star.png" class="best" 
 		data-id="<?=$translation["translation_id"]?>" pid="<?=$best_trans[$frag_num]?>" value="^_^">
-</td>
+</span>
 <?}?>

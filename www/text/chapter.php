@@ -73,6 +73,11 @@
 		$trans_num = 1;
 		while ($trans_row = mysql_fetch_assoc($trans_result))
 		{
+			$user_query = 'SELECT `name` FROM `user` WHERE	`user_id` = ' . $trans_row["user_id"];
+			$user_result = mysql_query($user_query);
+			$user_row = mysql_fetch_assoc($user_result);
+			
+			$trans_row["name"] = $user_row["name"];
 			$translations[$frag_num][$trans_num] = $trans_row;
 			$trans_id = $trans_row["translation_id"];
 			if ($trans_row["user_id"] == $user_id)
@@ -92,9 +97,7 @@
 		$frag_num++;
 	}
 	$title = 'Редактирование';
-	$trans_cols = 3;
-	if ($user->isTextModerator())
-		$trans_cols = 5;
+	$moderate = $user->isTextModerator();
 	include('./templates/chapter.tpl');
 ?>
 

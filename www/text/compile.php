@@ -23,7 +23,7 @@
 
 	$text_query = 'SELECT `text`.*, `user`.`name` AS `creator_name` FROM `text` JOIN `user` ON(`creator` = `user_id`) WHERE `text_id` = ' . $text_id;
 	$chapter_query = 'SELECT `chapter_name`, `chapter_number` FROM `chapter` WHERE `chapter_id` = ' . $chapter_id;
-	$fragment_query = 'SELECT `fragment_id`, `text` FROM `fragment` WHERE `chapter_id` = ' . $chapter_id;
+	$fragment_query = 'SELECT `fragment_id`, `text`, `new_par` FROM `fragment` WHERE `chapter_id` = ' . $chapter_id;
 
 	$text_result = mysql_query($text_query);
 	$chapter_result = mysql_query($chapter_query);
@@ -57,16 +57,21 @@
 			$row = mysql_fetch_assoc($trans_result);
 		}
 
-		
+		$del = " ";
+		if ($i == 1)
+			$del = "<p>";
+		else if ($fragment_row["new_par"])
+			$del = "</p><p>";
 		
 		if ($row)
-			$chapter_translation = $chapter_translation . ' ' . $row["text"];
+			$chapter_translation = $chapter_translation . $del . $row["text"];
 		else
 		{
 			$full = false;
 			$chapter_translation = $chapter_translation . ' <Отрывок ожидает перевода>';
 		}
 	}
+	$chapter_translation .= "</p>";
 	
 	$title = 'Глава';
 	include('./templates/compile.tpl');
