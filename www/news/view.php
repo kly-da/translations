@@ -43,7 +43,10 @@
 	</div>
 	<div style="clear:right;"/></div>
 	<div class="news">
-    <div class="middle_text">Новости</div>
+    <?
+			include('news_rigth.php');
+			
+		?>
 	</div>
   </body>
 
